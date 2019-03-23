@@ -15,12 +15,17 @@ namespace MyJournal.Data
 
         public IQueryable<TInstance> Instances<TInstance>() where TInstance : class
         {
-            return Set<TInstance>();
+            var query = Set<TInstance>();
+            foreach (var property in typeof(TInstance).GetProperties().Where(x => x.GetGetMethod().ReturnType.BaseType == typeof(TInstance).BaseType || x.GetGetMethod().IsVirtual))
+            {
+                query.Include(property.Name);
+            }
+            return query;
         }
 
         public TInstance Find<TInstance>(Func<TInstance, bool> selector) where TInstance : class
         {
-            return Set<TInstance>().FirstOrDefault(selector);
+            return Instances<TInstance>().FirstOrDefault(selector);
         }
 
         public bool CreateInstance<TInstance>(TInstance instance) where TInstance : class
