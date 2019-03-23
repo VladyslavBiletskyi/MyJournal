@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -8,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using MyJournal.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MyJournal.Domain.Extensibility;
 
 namespace MyJournal
 {
@@ -30,14 +34,16 @@ namespace MyJournal
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddDbContext<ApplicationDbContext>(options =>
+            services.AddDbContext<MyJournalDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddDefaultIdentity<IdentityUser>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<MyJournalDbContext>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            ApplyBindings(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -70,6 +76,30 @@ namespace MyJournal
             });
 
             app.UseAuthentication();
+        }
+
+        private void ApplyBindings(IServiceCollection services)
+        {
+            services.AddTransient<IDatabaseContext, MyJournalDbContext>();
+
+            var entryAssembly = Assembly.GetEntryAssembly();
+            var assemblies = new List<Assembly> { entryAssembly };
+
+            foreach (var assembly in entryAssembly.GetReferencedAssemblies())
+            {
+                assemblies.Add(Assembly.Load(assembly));
+            }
+
+            foreach (var assembly in assemblies)
+            {
+                foreach (TypeInfo ti in assembly.DefinedTypes)
+                {
+                    if (ti.ImplementedInterfaces.Contains(typeof(IBindingModule)))
+                    {
+                        (assembly.CreateInstance(ti.FullName) as IBindingModule)?.ApplyBindings(services);
+                    }
+                }
+            }
         }
     }
 }
