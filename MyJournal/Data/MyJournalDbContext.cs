@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using MyJournal.Domain.Extensibility;
@@ -16,7 +17,10 @@ namespace MyJournal.Data
         public IQueryable<TInstance> Instances<TInstance>() where TInstance : class
         {
             var query = Set<TInstance>();
-            foreach (var property in typeof(TInstance).GetProperties().Where(x => x.GetGetMethod().ReturnType.BaseType == typeof(TInstance).BaseType || x.GetGetMethod().IsVirtual))
+            foreach (var property in typeof(TInstance).GetProperties().Where(x => 
+                x.GetGetMethod().ReturnType.BaseType == typeof(TInstance).BaseType
+                || x.GetGetMethod().ReturnType.BaseType == typeof(IdentityUser)
+                || x.GetGetMethod().IsVirtual))
             {
                 query.Include(property.Name);
             }
@@ -33,6 +37,7 @@ namespace MyJournal.Data
             try
             {
                 Set<TInstance>().Add(instance);
+                SaveChanges();
                 return true;
             }
             catch
@@ -46,6 +51,7 @@ namespace MyJournal.Data
             try
             {
                 Set<TInstance>().Remove(instance);
+                SaveChanges();
                 return true;
             }
             catch
