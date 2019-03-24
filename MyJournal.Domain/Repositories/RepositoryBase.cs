@@ -6,32 +6,32 @@ namespace MyJournal.Domain.Repositories
 {
     public abstract class RepositoryBase<TInstance>: IRepositoryBase<TInstance> where TInstance : BaseInstance
     {
-        private readonly IDatabaseContext databaseContext;
+        protected readonly IDatabaseContext DatabaseContext;
 
         protected RepositoryBase(IDatabaseContext databaseContext)
         {
-            this.databaseContext = databaseContext;
+            DatabaseContext = databaseContext;
         }
 
         public IEnumerable<TInstance> Instances()
         {
-            return databaseContext.Instances<TInstance>();
+            return DatabaseContext.Instances<TInstance>();
         }
 
         public TInstance Find(int key)
         {
-            return databaseContext.Find((TInstance instance) => instance.Id == key);
+            return DatabaseContext.Find((TInstance instance) => instance.Id == key);
         }
 
-        public bool CreateInstance(TInstance instance)
+        public virtual bool CreateInstance(TInstance instance)
         {
-            return databaseContext.CreateInstance(instance);
+            return DatabaseContext.CreateInstance(instance);
         }
 
-        public bool TryRemoveInstance(TInstance instance)
+        public virtual bool TryRemoveInstance(TInstance instance)
         {
             var originalInstance = Find(instance.Id);
-            return originalInstance != null && databaseContext.TryRemoveInstance(originalInstance);
+            return originalInstance != null && DatabaseContext.TryRemoveInstance(originalInstance);
         }
 
         public abstract bool TryUpdateInstance(TInstance instance);

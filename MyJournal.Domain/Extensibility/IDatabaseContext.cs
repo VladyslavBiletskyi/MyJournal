@@ -12,5 +12,7 @@ namespace MyJournal.Domain.Extensibility
         bool CreateInstance<TInstance>(TInstance instance) where TInstance : class;
 
         bool TryRemoveInstance<TInstance>(TInstance instance) where TInstance : class;
+
+        int SaveChanges();
     }
 }
