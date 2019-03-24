@@ -16,13 +16,13 @@ namespace MyJournal.Data
 
         public IQueryable<TInstance> Instances<TInstance>() where TInstance : class
         {
-            var query = Set<TInstance>();
+            IQueryable<TInstance> query = Set<TInstance>();
             foreach (var property in typeof(TInstance).GetProperties().Where(x => 
                 x.GetGetMethod().ReturnType.BaseType == typeof(TInstance).BaseType
                 || x.GetGetMethod().ReturnType.BaseType == typeof(IdentityUser)
                 || x.GetGetMethod().IsVirtual))
             {
-                query.Include(property.Name);
+                query = query.Include(property.Name);
             }
             return query;
         }
