@@ -80,7 +80,7 @@ namespace MyJournal
 
         private void ApplyBindings(IServiceCollection services)
         {
-            services.AddTransient<IDatabaseContext, MyJournalDbContext>();
+            services.AddSingleton<IDatabaseContext, MyJournalDbContext>();
 
             var entryAssembly = Assembly.GetEntryAssembly();
             var assemblies = new List<Assembly> { entryAssembly };
@@ -90,7 +90,7 @@ namespace MyJournal
                 assemblies.Add(Assembly.Load(assembly));
             }
 
-            foreach (var assembly in assemblies)
+            foreach (var assembly in assemblies.Where(x => x.FullName.StartsWith(entryAssembly.GetName().Name)))
             {
                 foreach (TypeInfo ti in assembly.DefinedTypes)
                 {
