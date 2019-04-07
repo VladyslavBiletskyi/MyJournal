@@ -7,8 +7,10 @@ using MyJournal.Domain.Extensibility;
 
 namespace MyJournal.Data
 {
-    public class MyJournalDbContext : IdentityDbContext, IDatabaseContext
+    public class MyJournalDbContext : IdentityDbContext<IdentityUser, IdentityRole, string>, IDatabaseContext
     {
+
+
         public MyJournalDbContext(DbContextOptions<MyJournalDbContext> options)
             : base(options)
         {

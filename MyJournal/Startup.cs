@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using MyJournal.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MyJournal.Domain.Entities;
 using MyJournal.Domain.Extensibility;
 
 namespace MyJournal
@@ -38,7 +39,7 @@ namespace MyJournal
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddDefaultIdentity<IdentityUser>()
+            services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<MyJournalDbContext>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
@@ -47,7 +48,7 @@ namespace MyJournal
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             if (env.IsDevelopment())
             {
@@ -76,6 +77,7 @@ namespace MyJournal
             });
 
             app.UseAuthentication();
+            AddClaims(userManager, roleManager);
         }
 
         private void ApplyBindings(IServiceCollection services)
@@ -99,6 +101,14 @@ namespace MyJournal
                         (assembly.CreateInstance(ti.FullName) as IBindingModule)?.ApplyBindings(services);
                     }
                 }
+            }
+        }
+
+        private void AddClaims(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+        {
+            if (!roleManager.RoleExistsAsync("Teacher").Result)
+            {
+                var result = roleManager.CreateAsync(new IdentityRole("Teacher")).Result;
             }
         }
     }
