@@ -3,14 +3,14 @@
 @if (User.Identity.IsAuthenticated)
 {  
         <ul class="nav navbar-nav navbar-right">
-            <li><a asp-page="/Account/Manage/Index" title="Manage">����� ����������!</a></li>
-            <li><a asp-page="/Account/Register">Register</a></li>
-            <li><a asp-area="" asp-controller="Account" asp-action="Logout">Logout</a></li>
+            <li><a asp-page="/Account/Manage/Index" title="Manage">Добро пожаловать!</a></li>
+            <li><a asp-page="/Account/Register">Зарегистрировать пользователя</a></li>
+            <li><a asp-area="" asp-controller="Account" asp-action="Logout">Выход</a></li>
         </ul>
 }
 else
 {
     <ul class="nav navbar-nav navbar-right">
-        <li><a asp-area="" asp-controller="Account" asp-action="Login" asp-route-returnUrl="@Context.Request.Path.ToString()">Login</a></li>
+        <li><a asp-area="" asp-controller="Account" asp-action="Login">Войти</a></li>
     </ul>
 }
