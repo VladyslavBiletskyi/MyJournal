@@ -75,9 +75,9 @@ namespace MyJournal.WebApi.Controllers
         }
 
         [HttpGet]
-        public IActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
-            HttpContext.SignOutAsync(
+            await HttpContext.SignOutAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Index", "Home");
         }

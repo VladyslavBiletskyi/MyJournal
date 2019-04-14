@@ -1,22 +1,16 @@
 @model LoginModel
 
-@if (false)
-{
-    <form asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post" id="logoutForm" class="navbar-right">
+@if (User.Identity.IsAuthenticated)
+{  
         <ul class="nav navbar-nav navbar-right">
-            <li>
-                <a asp-page="/Account/Manage/Index" title="Manage">Добро пожаловать!</a>
-            </li>
+            <li><a asp-page="/Account/Manage/Index" title="Manage">Добро пожаловать!</a></li>
             <li><a asp-page="/Account/Register">Register</a></li>
-            <li>
-                <button type="submit" class="btn btn-link navbar-btn navbar-link">Выход</button>
-            </li>
+            <li><a asp-area="" asp-controller="Account" asp-action="Logout">Logout</a></li>
         </ul>
-    </form>
 }
 else
 {
     <ul class="nav navbar-nav navbar-right">
-        <li><a asp-area="" asp-controller="Account" asp-action="Login">Login</a></li>
+        <li><a asp-area="" asp-controller="Account" asp-action="Login" asp-route-returnUrl="@Context.Request.Path.ToString()">Login</a></li>
     </ul>
 }
