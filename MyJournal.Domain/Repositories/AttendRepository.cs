@@ -1,11 +1,13 @@
-﻿using MyJournal.Domain.Entities;
+﻿using MyJournal.Domain.Data;
+using MyJournal.Domain.Entities;
 using MyJournal.Domain.Extensibility;
+using MyJournal.Domain.Extensibility.Repositories;
 
 namespace MyJournal.Domain.Repositories
 {
     public class AttendRepository : RepositoryBase<Attend>, IAttendRepository
     {
-        public AttendRepository(IDatabaseContext databaseContext) : base(databaseContext)
+        public AttendRepository(MyJournalDbContext databaseContext) : base(databaseContext)
         {
         }
 

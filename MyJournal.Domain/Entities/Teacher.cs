@@ -1,12 +1,14 @@
 ﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Identity;
 
 namespace MyJournal.Domain.Entities
 {
-    public class Teacher : IdentityUser
+    public class Teacher : ApplicationUser
     {
-        public virtual ICollection<Subject> Subjects { get; set; }
+        public Teacher()
+        {
+            Role = nameof(Teacher);
+        }
 
-        public Group Group { get; set; }
+        public virtual ICollection<Subject> Subjects { get; set; }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using MyJournal.Domain.Data;
 using MyJournal.Domain.Entities;
 using MyJournal.Domain.Extensibility;
+using MyJournal.Domain.Extensibility.Repositories;
 
 namespace MyJournal.Domain.Repositories
 {
@@ -8,7 +10,7 @@ namespace MyJournal.Domain.Repositories
     {
         protected readonly IDatabaseContext DatabaseContext;
 
-        protected RepositoryBase(IDatabaseContext databaseContext)
+        protected RepositoryBase(MyJournalDbContext databaseContext)
         {
             DatabaseContext = databaseContext;
         }

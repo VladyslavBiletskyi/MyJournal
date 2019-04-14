@@ -1,11 +1,13 @@
-﻿using MyJournal.Domain.Entities;
+﻿using MyJournal.Domain.Data;
+using MyJournal.Domain.Entities;
 using MyJournal.Domain.Extensibility;
+using MyJournal.Domain.Extensibility.Repositories;
 
 namespace MyJournal.Domain.Repositories
 {
     public class GroupRepository : RepositoryBase<Group>, IGroupRepository
     {
-        public GroupRepository(IDatabaseContext databaseContext) : base(databaseContext)
+        public GroupRepository(MyJournalDbContext databaseContext) : base(databaseContext)
         {
         }
 

@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
-namespace MyJournal.Domain.Extensibility
+namespace MyJournal.Domain.Extensibility.Repositories
 {
     public interface IRepositoryBase<TInstance> where TInstance : class
     {

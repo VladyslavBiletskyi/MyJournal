@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
-
-namespace MyJournal.Domain.Entities
+﻿namespace MyJournal.Domain.Entities
 {
-    public class Student : IdentityUser
+    public class Student: ApplicationUser
     {
-        public Group Group { get; set; }
+        public Student()
+        {
+            Role = nameof(Student);
+        }
     }
 }

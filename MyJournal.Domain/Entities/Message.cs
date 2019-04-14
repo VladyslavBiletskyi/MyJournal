@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.AspNetCore.Identity;
 
 namespace MyJournal.Domain.Entities
 {
@@ -7,7 +6,7 @@ namespace MyJournal.Domain.Entities
     {
         public Teacher Sender { get; set; }
 
-        public IdentityUser Addressee { get; set; }
+        public ApplicationUser Addressee { get; set; }
 
         public string Text { get; set; }
 

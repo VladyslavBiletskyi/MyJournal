@@ -1,12 +1,14 @@
 ﻿using System;
+using MyJournal.Domain.Data;
 using MyJournal.Domain.Entities;
 using MyJournal.Domain.Extensibility;
+using MyJournal.Domain.Extensibility.Repositories;
 
 namespace MyJournal.Domain.Repositories
 {
     public class MarkRepository : RepositoryBase<Mark>, IMarkRepository
     {
-        public MarkRepository(IDatabaseContext databaseContext) : base(databaseContext)
+        public MarkRepository(MyJournalDbContext databaseContext) : base(databaseContext)
         {
         }
 

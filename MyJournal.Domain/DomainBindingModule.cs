@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using MyJournal.Domain.Data;
 using MyJournal.Domain.Extensibility;
+using MyJournal.Domain.Extensibility.Repositories;
 using MyJournal.Domain.Repositories;
 
 namespace MyJournal.Domain
@@ -14,6 +16,8 @@ namespace MyJournal.Domain
             services.AddTransient<IAttendRepository, AttendRepository>();
             services.AddTransient<IMarkRepository, MarkRepository>();
             services.AddTransient<IMessageRepository, MessageRepository>();
+            services.AddTransient<ITeacherRepository, TeacherRepository>();
+            services.AddTransient<IStudentRepository, StudentRepository>();
         }
     }
 }

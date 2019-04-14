@@ -1,11 +1,13 @@
-﻿using MyJournal.Domain.Entities;
+﻿using MyJournal.Domain.Data;
+using MyJournal.Domain.Entities;
 using MyJournal.Domain.Extensibility;
+using MyJournal.Domain.Extensibility.Repositories;
 
 namespace MyJournal.Domain.Repositories
 {
     public class LessonRepository : RepositoryBase<Lesson>, ILessonRepository
     {
-        public LessonRepository(IDatabaseContext databaseContext) : base(databaseContext)
+        public LessonRepository(MyJournalDbContext databaseContext) : base(databaseContext)
         {
         }
 

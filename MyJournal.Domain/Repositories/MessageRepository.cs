@@ -1,11 +1,13 @@
-﻿using MyJournal.Domain.Entities;
+﻿using MyJournal.Domain.Data;
+using MyJournal.Domain.Entities;
 using MyJournal.Domain.Extensibility;
+using MyJournal.Domain.Extensibility.Repositories;
 
 namespace MyJournal.Domain.Repositories
 {
     public class MessageRepository : RepositoryBase<Message>, IMessageRepository
     {
-        public MessageRepository(IDatabaseContext databaseContext) : base(databaseContext)
+        public MessageRepository(MyJournalDbContext databaseContext) : base(databaseContext)
         {
         }
 

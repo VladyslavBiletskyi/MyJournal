@@ -1,11 +1,13 @@
-﻿using MyJournal.Domain.Entities;
+﻿using MyJournal.Domain.Data;
+using MyJournal.Domain.Entities;
 using MyJournal.Domain.Extensibility;
+using MyJournal.Domain.Extensibility.Repositories;
 
 namespace MyJournal.Domain.Repositories
 {
     public class SubjectRepository : RepositoryBase<Subject>, ISubjectRepository
     {
-        public SubjectRepository(IDatabaseContext databaseContext) : base(databaseContext)
+        public SubjectRepository(MyJournalDbContext databaseContext) : base(databaseContext)
         {
         }
 
