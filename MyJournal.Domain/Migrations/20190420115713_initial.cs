@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MyJournal.Domain.Migrations
 {
-    public partial class MyJournalDomainDataMyJournalDbContext : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -14,7 +14,8 @@ namespace MyJournal.Domain.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(nullable: true)
+                    Year = table.Column<int>(nullable: false),
+                    Letter = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {

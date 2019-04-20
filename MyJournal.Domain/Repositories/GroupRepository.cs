@@ -19,7 +19,8 @@ namespace MyJournal.Domain.Repositories
                 return false;
             }
 
-            original.Name = instance.Name;
+            original.Year = instance.Year;
+            original.Letter = instance.Letter;
             DatabaseContext.SaveChanges();
             return true;
         }

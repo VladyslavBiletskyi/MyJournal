@@ -1,7 +1,6 @@
 ﻿namespace MyJournal.Services.Extensibility.Seeders
 {
-    internal interface IInitialUserSeeder
+    internal interface IInitialUserSeeder : ISeeder
     {
-        void Seed();
     }
 }

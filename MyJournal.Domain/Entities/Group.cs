@@ -2,6 +2,8 @@
 {
     public class Group : BaseInstance
     {
-        public string Name { get; set; }
+        public int Year { get; set; }
+
+        public string Letter { get; set; }
     }
 }

@@ -10,8 +10,8 @@ using MyJournal.Domain.Data;
 namespace MyJournal.Domain.Migrations
 {
     [DbContext(typeof(MyJournalDbContext))]
-    [Migration("20190414170452_MyJournal.Domain.Data.MyJournalDbContext")]
-    partial class MyJournalDomainDataMyJournalDbContext
+    [Migration("20190420115713_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -80,7 +80,9 @@ namespace MyJournal.Domain.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Letter");
+
+                    b.Property<int>("Year");
 
                     b.HasKey("Id");
 

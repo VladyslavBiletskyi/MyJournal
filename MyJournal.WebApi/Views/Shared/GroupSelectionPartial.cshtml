@@ -1,0 +1,12 @@
+﻿@using MyJournal.WebApi.Controllers
+@model GroupModel
+
+@inject GroupController GroupController
+
+    <select asp-for="GroupId">
+        <option value="-1" label="Без класса"></option>
+        @foreach (var group in GroupController.GetAll())
+    {
+        <option value="@group.GroupId" label="@group.Name"></option>
+    }
+    </select>
