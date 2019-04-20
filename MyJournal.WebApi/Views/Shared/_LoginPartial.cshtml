@@ -3,7 +3,7 @@
 @if (User.Identity.IsAuthenticated)
 {  
         <ul class="navbar-nav">
-            <li class="nav-item"><a asp-page="/Account/Manage/Index" title="Manage" class="nav-link text-dark">Добро пожаловать!</a></li>
+            <li class="nav-item"><a asp-page="/Account/Manage/Index" title="Manage" class="nav-link text-dark">Добро пожаловать, @User.Claims.FirstOrDefault(claim => claim.Type == "name")?.Value!</a></li>
             <li class="nav-item"><a asp-area="" asp-controller="Account" asp-action="Register" class="nav-link text-dark">Зарегистрировать пользователя</a></li>
             <li class="nav-item"><a asp-area="" asp-controller="Account" asp-action="Logout" class="nav-link text-dark">Выход</a></li>
         </ul>

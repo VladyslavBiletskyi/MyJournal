@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using MyJournal.Domain.Extensibility;
 using MyJournal.Services.Extensibility;
+using MyJournal.Services.Extensibility.Seeders;
+using MyJournal.Services.Seeders;
 
 namespace MyJournal.Services
 {

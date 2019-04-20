@@ -1,4 +1,4 @@
-﻿namespace MyJournal.Services.Extensibility
+﻿namespace MyJournal.Services.Extensibility.Seeders
 {
     internal interface IInitialUserSeeder
     {

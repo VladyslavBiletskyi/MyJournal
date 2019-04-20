@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyJournal.Services.Extensibility;
+using MyJournal.Services.Validation;
 using MyJournal.WebApi.Models;
 
 namespace MyJournal.WebApi.Controllers
@@ -48,7 +50,8 @@ namespace MyJournal.WebApi.Controllers
                 var identity = new ClaimsIdentity(new List<Claim>
                 {
                     new Claim("user", user.Login),
-                    new Claim("role", user.Role)
+                    new Claim("role", user.Role),
+                    new Claim("name", $"{user.FirstName} {user.LastName}")
                 }, CookieAuthenticationDefaults.AuthenticationScheme);
 
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
@@ -80,6 +83,20 @@ namespace MyJournal.WebApi.Controllers
         public IActionResult Register()
         {
             return View();
+        }
+
+        [HttpPost]
+        [Authorize(Policy = Constants.TeacherPolicyName)]
+        public IActionResult Register([FromForm]RegisterModel model)
+        {
+            var result = userManager.Create(model.Login, model.Password, model.FirstName, model.LastName, model.Surname, model.GroupId, model.IsTeacher);
+            if (!result.IsValid)
+            {
+                ModelState.AddModelError(nameof(model.Login), result.ValidationMessages.FirstOrDefault());
+                return View();
+            }
+
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpGet]

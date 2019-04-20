@@ -2,8 +2,9 @@
 using MyJournal.Domain.Entities;
 using MyJournal.Domain.Extensibility.Repositories;
 using MyJournal.Services.Extensibility;
+using MyJournal.Services.Extensibility.Seeders;
 
-namespace MyJournal.Services
+namespace MyJournal.Services.Seeders
 {
     internal class InitialUserSeeder : IInitialUserSeeder
     {

@@ -9,7 +9,7 @@ namespace MyJournal.Services
 
         private const int SaltByteSize = 24;
         private const int HashByteSize = 24;
-        private const int HashingIterationsCount = 10101;
+        private const int HashingIterationsCount = 501;
 
         public Tuple<string, string> GetHash(string password, byte[] salt = null)
         {

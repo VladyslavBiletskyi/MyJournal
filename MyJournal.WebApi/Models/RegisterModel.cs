@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace MyJournal.WebApi.Models
 {
@@ -22,8 +23,7 @@ namespace MyJournal.WebApi.Models
         [Required]
         public string Surname { get; set; }
 
-        [Required]
-        public string GroupId { get; set; }
+        public int GroupId { get; set; }
 
         [Required]
         public bool IsTeacher { get; set; }
