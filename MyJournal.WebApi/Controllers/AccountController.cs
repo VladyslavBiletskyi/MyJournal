@@ -4,6 +4,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyJournal.Services.Extensibility;
 using MyJournal.WebApi.Models;
@@ -71,6 +72,13 @@ namespace MyJournal.WebApi.Controllers
                 }
             }
 
+            return View();
+        }
+
+        [HttpGet]
+        [Authorize(Policy = Constants.TeacherPolicyName)]
+        public IActionResult Register()
+        {
             return View();
         }
 

@@ -30,6 +30,13 @@ namespace MyJournal.WebApi.Controllers
             return View();
         }
 
+        public IActionResult AccessDenied()
+        {
+            ViewData["Message"] = "У вас нет прав для просмотра данной страницы. Возможно, вы должны быть зарегистрированны или иметь права учителя.";
+
+            return View();
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

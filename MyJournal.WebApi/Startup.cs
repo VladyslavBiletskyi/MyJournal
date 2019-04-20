@@ -45,7 +45,11 @@ namespace MyJournal.WebApi
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
             {
                 options.LoginPath = "/Account/Login";
+                options.AccessDeniedPath = "/Home/AccessDenied";
             });
+
+            services.AddAuthorization(options => options.AddPolicy(Constants.TeacherPolicyName,
+                builder => builder.RequireClaim(Constants.RoleClaimName, Constants.TeacherRoleName).Build()));
 
             services.Configure<WebEncoderOptions>(options =>
             {
