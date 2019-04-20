@@ -19,7 +19,20 @@ namespace MyJournal.Domain.Repositories
 
         public override bool TryUpdateInstance(TUser instance)
         {
-            throw new System.NotImplementedException();
+            var originalInstance = Find(instance.Id);
+            if (originalInstance != null)
+            {
+                originalInstance.FirstName = instance.FirstName;
+                originalInstance.LastName = instance.LastName;
+                originalInstance.Surname = instance.Surname;
+                originalInstance.PasswordSalt = instance.PasswordSalt;
+                originalInstance.PasswordHash = instance.PasswordHash;
+                originalInstance.Group = instance.Group;
+                DatabaseContext.SaveChanges();
+                return true;
+            }
+
+            return false;
         }
     }
 }

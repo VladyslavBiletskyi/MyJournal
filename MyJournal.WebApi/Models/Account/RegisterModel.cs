@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace MyJournal.WebApi.Models
+namespace MyJournal.WebApi.Models.Account
 {
     public class RegisterModel
     {

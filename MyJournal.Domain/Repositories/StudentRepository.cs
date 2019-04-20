@@ -11,10 +11,5 @@ namespace MyJournal.Domain.Repositories
         public StudentRepository(MyJournalDbContext databaseContext) : base(databaseContext)
         {
         }
-
-        public override bool TryUpdateInstance(Student instance)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

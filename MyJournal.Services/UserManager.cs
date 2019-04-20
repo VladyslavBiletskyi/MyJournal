@@ -81,6 +81,39 @@ namespace MyJournal.Services
             return new ValidationResult<ApplicationUser>("Ошибка при регистрации пользователя");
         }
 
+        public bool ChangePassword(string login, string newPassword)
+        {
+            var newPasswordData = passwordHasher.GetHash(newPassword);
+
+            ApplicationUser user = teacherRepository.FindByLogin(login);
+            if (user == null)
+            {
+                user = studentRepository.FindByLogin(login);
+                if (user == null)
+                {
+                    return false;
+                }
+
+                user.PasswordHash = newPasswordData.Item1;
+                user.PasswordSalt = newPasswordData.Item2;
+                return studentRepository.TryUpdateInstance((Student) user);
+            }
+            user.PasswordHash = newPasswordData.Item1;
+            user.PasswordSalt = newPasswordData.Item2;
+            return teacherRepository.TryUpdateInstance((Teacher) user);
+        }
+
+        private ApplicationUser FindUser(string login)
+        {
+            ApplicationUser user = teacherRepository.FindByLogin(login);
+            if (user == null)
+            {
+                user = studentRepository.FindByLogin(login);
+            }
+
+            return user;
+        }
+
         private TUser CreateUser<TUser>(string login, string password, string firstName, string lastName, string surname, int groupId) where TUser : ApplicationUser, new()
         {
             var passwordData = passwordHasher.GetHash(password);

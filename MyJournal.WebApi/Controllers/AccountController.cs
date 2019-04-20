@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using MyJournal.Services.Extensibility;
 using MyJournal.Services.Validation;
 using MyJournal.WebApi.Models;
+using MyJournal.WebApi.Models.Account;
 
 namespace MyJournal.WebApi.Controllers
 {
@@ -20,6 +21,44 @@ namespace MyJournal.WebApi.Controllers
         public AccountController(IUserManager userManager)
         {
             this.userManager = userManager;
+        }
+
+        [Authorize]
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        [Authorize]
+        public IActionResult ChangePassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult ChangePassword(ChangePasswordModel model)
+        {
+            if (model.NewPassword != model.NewPasswordConfirmation)
+            {
+                ModelState.AddModelError(nameof(model.NewPasswordConfirmation), "Пароли не совпадают");
+                return View();
+            }
+            var login = User.Claims.FirstOrDefault(x => x.Type == Constants.UserLoginClaimName)?.Value;
+            var user = userManager.TryAuthenticate(login, model.OldPassword, out bool isUserFound);
+            if (user == null)
+            {
+                ModelState.AddModelError(nameof(model.OldPassword), "Пароль не верен");
+                return View();
+            }
+
+            if (userManager.ChangePassword(login, model.NewPassword))
+            {
+                return RedirectToAction("Index");
+            }
+            ModelState.AddModelError(nameof(model.OldPassword), "Ошибка при смене пароля");
+            return View();
         }
 
         public IActionResult Login(string returnUrl)
@@ -49,8 +88,8 @@ namespace MyJournal.WebApi.Controllers
 
                 var identity = new ClaimsIdentity(new List<Claim>
                 {
-                    new Claim("user", user.Login),
-                    new Claim("role", user.Role),
+                    new Claim(Constants.UserLoginClaimName, user.Login),
+                    new Claim(Constants.RoleClaimName, user.Role),
                     new Claim("name", $"{user.FirstName} {user.LastName}")
                 }, CookieAuthenticationDefaults.AuthenticationScheme);
 
@@ -65,7 +104,7 @@ namespace MyJournal.WebApi.Controllers
             }
             else
             {
-                if (isUserFound)
+                if (!isUserFound)
                 {
                     ModelState.AddModelError(nameof(model.Login), "Пользователь не найден");
                 }

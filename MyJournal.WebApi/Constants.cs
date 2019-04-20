@@ -7,5 +7,7 @@
         public const string TeacherRoleName = "Teacher";
 
         public const string RoleClaimName = "role";
+
+        public const string UserLoginClaimName = "user";
     }
 }

@@ -8,5 +8,7 @@ namespace MyJournal.Services.Extensibility
         ApplicationUser TryAuthenticate(string login, string password, out bool isUserFound);
 
         ValidationResult<ApplicationUser> Create(string login, string password, string firstName, string lastName, string surname, int groupId, bool isTeacher);
+
+        bool ChangePassword(string login, string newPassword);
     }
 }
