@@ -9,6 +9,7 @@ namespace MyJournal.WebApi
         public void ApplyBindings(IServiceCollection services)
         {
             services.AddTransient<GroupController>();
+            services.AddTransient<SubjectController>();
         }
     }
 }

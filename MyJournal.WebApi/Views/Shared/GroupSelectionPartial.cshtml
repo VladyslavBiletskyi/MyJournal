@@ -3,7 +3,7 @@
 
 @inject GroupController GroupController
 
-    <select asp-for="GroupId">
+    <select asp-for="GroupId" class="custom-select">
         <option value="-1" label="Без класса"></option>
         @foreach (var group in GroupController.GetAll())
     {

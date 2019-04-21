@@ -1,0 +1,11 @@
+﻿@using MyJournal.WebApi.Controllers
+@model MyJournal.WebApi.Models.Subject.SubjectModel
+
+@inject SubjectController SubjectController
+
+    <select asp-for="SubjectId" class="custom-select">
+        @foreach (var subject in SubjectController.Get())
+    {
+        <option value="@subject.SubjectId" label="@subject.Name"></option>
+    }
+    </select>

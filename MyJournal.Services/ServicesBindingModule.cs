@@ -17,6 +17,7 @@ namespace MyJournal.Services
             services.AddTransient<IInitialGroupSeeder, InitialGroupSeeder>();
             services.AddTransient<IUserManager, UserManager>();
             services.AddTransient<IGroupService, GroupService>();
+            services.AddTransient<ISubjectService, SubjectService>();
         }
     }
 }

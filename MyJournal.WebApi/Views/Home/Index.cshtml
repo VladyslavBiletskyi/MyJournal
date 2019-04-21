@@ -3,3 +3,23 @@
 }
 
 <p>Система <b>MyJournal</b> находится на стадии разработки.</p>
+
+@if (User.Identity.IsAuthenticated)
+{
+    <div class="jumbotron">
+        <div class="container">
+            <div class="row">
+                @if (User.Claims.FirstOrDefault(x => x.Type == Constants.RoleClaimName)?.Value == Constants.TeacherRoleName)
+                {
+                    <div class="col-lg-4">
+                        <button asp-controller="Subject" asp-action="Create" class="btn btn-dark btn-lg">Добавить предмет</button>
+                    </div>
+                }
+                else
+                {
+                    
+                }
+            </div>
+        </div>
+    </div>
+}

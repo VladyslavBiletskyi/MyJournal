@@ -8,8 +8,6 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyJournal.Services.Extensibility;
-using MyJournal.Services.Validation;
-using MyJournal.WebApi.Models;
 using MyJournal.WebApi.Models.Account;
 
 namespace MyJournal.WebApi.Controllers

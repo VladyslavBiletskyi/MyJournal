@@ -1,0 +1,28 @@
+﻿@model  MyJournal.WebApi.Models.Subject.CreateModel
+@{
+    ViewData["Title"] = "Добавить предмет";
+}
+
+<h1>Добавление предмета</h1>
+
+<hr />
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label class="control-label">Название предмета</label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Сменить пароль" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-controller="Home" asp-action="Index">Назад</a>
+</div>
