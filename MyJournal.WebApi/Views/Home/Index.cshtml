@@ -2,7 +2,7 @@
     ViewData["Title"] = "Домашняя страница";
 }
 
-<p>Система <b>MyJournal</b> находится на стадии разработки.</p>
+    <p>Для доступу до даних електронного журналу <b>MyJournal</b> авторизуйтесь у системі.</p>
 
 @if (User.Identity.IsAuthenticated)
 {
@@ -12,7 +12,7 @@
                 @if (User.Claims.FirstOrDefault(x => x.Type == Constants.RoleClaimName)?.Value == Constants.TeacherRoleName)
                 {
                     <div class="col-lg-4">
-                        <button asp-controller="Subject" asp-action="Create" class="btn btn-dark btn-lg">Добавить предмет</button>
+                        <a  asp-controller="Subject" asp-action="Create" class="btn btn-dark btn-lg">Добавить предмет</a>
                     </div>
                 }
                 else
