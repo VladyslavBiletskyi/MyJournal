@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Query;
 using MyJournal.Domain.Entities;
 using MyJournal.Domain.Extensibility;
 
@@ -35,13 +39,8 @@ namespace MyJournal.Domain.Data
 
         public IQueryable<TInstance> Instances<TInstance>() where TInstance : class
         {
-            IQueryable<TInstance> query = Set<TInstance>();
-            foreach (var property in typeof(TInstance).GetProperties().Where(x =>
-                x.GetGetMethod().ReturnType.BaseType == typeof(TInstance).BaseType
-                || x.GetGetMethod().IsVirtual))
-            {
-                query = query.Include(property.Name);
-            }
+            IQueryable<TInstance> query = Include(Set<TInstance>(), GetIncludePaths(typeof(TInstance)));
+            
             return query;
         }
 
@@ -77,5 +76,47 @@ namespace MyJournal.Domain.Data
                 return false;
             }
         }
+
+        private IQueryable<TInstance> Include<TInstance>(IQueryable<TInstance> source, IEnumerable<string> navigationPropertyPaths)
+            where TInstance : class
+        {
+            return navigationPropertyPaths.Aggregate(source, (query, path) => query.Include(path));
+        }
+
+        private IEnumerable<string> GetIncludePaths(Type clrEntityType)
+        {
+            var entityType = Model.FindEntityType(clrEntityType);
+            var includedNavigations = new HashSet<INavigation>();
+            var stack = new Stack<IEnumerator<INavigation>>();
+            while (true)
+            {
+                var entityNavigations = new List<INavigation>();
+                foreach (var navigation in entityType.GetNavigations())
+                {
+                    if (includedNavigations.Add(navigation))
+                        entityNavigations.Add(navigation);
+                }
+                if (entityNavigations.Count == 0)
+                {
+                    if (stack.Count > 0)
+                        yield return string.Join(".", stack.Reverse().Select(e => e.Current.Name));
+                }
+                else
+                {
+                    foreach (var navigation in entityNavigations)
+                    {
+                        var inverseNavigation = navigation.FindInverse();
+                        if (inverseNavigation != null)
+                            includedNavigations.Add(inverseNavigation);
+                    }
+                    stack.Push(entityNavigations.GetEnumerator());
+                }
+                while (stack.Count > 0 && !stack.Peek().MoveNext())
+                    stack.Pop();
+                if (stack.Count == 0) break;
+                entityType = stack.Peek().Current.GetTargetType();
+            }
+        }
+
     }
 }
