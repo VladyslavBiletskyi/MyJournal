@@ -19,6 +19,13 @@ namespace MyJournal.WebApi
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .ConfigureLogging((hostingContext, logging) =>
+                {
+                    logging.ClearProviders();
+                    logging.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
+                    logging.AddDebug();
+
+                })
                 .UseStartup<Startup>();
     }
 }
