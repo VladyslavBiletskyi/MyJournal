@@ -10,6 +10,7 @@ namespace MyJournal.WebApi
         {
             services.AddTransient<GroupController>();
             services.AddTransient<SubjectController>();
+            services.AddTransient<UserController>();
         }
     }
 }

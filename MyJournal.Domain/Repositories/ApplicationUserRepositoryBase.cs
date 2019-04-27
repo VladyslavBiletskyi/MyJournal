@@ -19,6 +19,10 @@ namespace MyJournal.Domain.Repositories
 
         public override bool TryUpdateInstance(TUser instance)
         {
+            if (instance == null)
+            {
+                return false;
+            }
             var originalInstance = Find(instance.Id);
             if (originalInstance != null)
             {

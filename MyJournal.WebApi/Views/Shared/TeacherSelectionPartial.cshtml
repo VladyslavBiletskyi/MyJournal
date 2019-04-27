@@ -1,0 +1,11 @@
+﻿@using MyJournal.WebApi.Controllers
+@model MyJournal.WebApi.Models.User.TeacherModel
+
+@inject UserController UserController
+
+    <select asp-for="TeacherId" class="custom-select">
+        @foreach (var teacher in UserController.GetTeachers())
+    {
+        <option value="@teacher.TeacherId" label="@teacher.Name"></option>
+    }
+    </select>
