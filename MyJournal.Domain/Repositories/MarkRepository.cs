@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using MyJournal.Domain.Data;
 using MyJournal.Domain.Entities;
 using MyJournal.Domain.Extensibility;
@@ -10,6 +11,11 @@ namespace MyJournal.Domain.Repositories
     {
         public MarkRepository(MyJournalDbContext databaseContext) : base(databaseContext)
         {
+        }
+
+        public bool BatchInsert(IEnumerable<Mark> marks)
+        {
+            return DatabaseContext.CreateInstances(marks);
         }
 
         public override bool TryUpdateInstance(Mark instance)

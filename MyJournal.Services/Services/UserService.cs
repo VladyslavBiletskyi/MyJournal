@@ -38,6 +38,16 @@ namespace MyJournal.Services.Services
             return teacher ?? studentRepository.Find(id);
         }
 
+        public ApplicationUser FindUser(string login)
+        {
+            if (login == null)
+            {
+                return null;
+            }
+            ApplicationUser teacher = teacherRepository.FindByLogin(login);
+            return teacher ?? studentRepository.FindByLogin(login);
+        }
+
         public bool Update(ApplicationUser user)
         {
             if (user == null)

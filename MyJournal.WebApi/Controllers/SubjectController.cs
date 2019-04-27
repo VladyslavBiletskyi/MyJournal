@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyJournal.Domain.Entities;
 using MyJournal.Services.Extensibility.Services;
+using MyJournal.WebApi.Extensibility.Formatters;
 using MyJournal.WebApi.Models.Subject;
 
 namespace MyJournal.WebApi.Controllers
@@ -12,11 +13,13 @@ namespace MyJournal.WebApi.Controllers
     {
         private ISubjectService subjectService;
         private IUserService userService;
+        private ISubjectNameFormatter subjectNameFormatter;
 
-        public SubjectController(ISubjectService subjectService, IUserService userService)
+        public SubjectController(ISubjectService subjectService, IUserService userService, ISubjectNameFormatter subjectNameFormatter)
         {
             this.subjectService = subjectService;
             this.userService = userService;
+            this.subjectNameFormatter = subjectNameFormatter;
         }
 
         [HttpGet]
@@ -92,13 +95,7 @@ namespace MyJournal.WebApi.Controllers
         [HttpGet]
         public IEnumerable<SubjectModel> Get()
         {
-            return subjectService.GetAll().Select(x => new SubjectModel {SubjectId = x.Id, Name = FormatName(x.Name)});
-        }
-
-        private string FormatName(string originalName)
-        {
-            var originalLower = originalName.ToLowerInvariant();
-            return originalLower[0].ToString().ToUpperInvariant() + originalLower.Substring(1);
+            return subjectService.GetAll().Select(x => new SubjectModel {SubjectId = x.Id, Name = subjectNameFormatter.Format(x)});
         }
     }
 }

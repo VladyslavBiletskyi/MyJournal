@@ -1,0 +1,31 @@
+﻿@model MyJournal.WebApi.Models.Lesson.LessonModel
+
+<h1>Урок</h1><p/>
+<h2>@Model.SubjectName - @Model.GroupName</h2>
+<div>
+    <hr />
+    <div class="container">
+        <div class="row">
+            <div class="col-2">
+                П.І.Б.
+            </div>
+            <div class="col-2">
+                Оцінка
+            </div>
+            <div class="col-2">
+                Відсутній
+            </div>
+        </div>
+    </div>
+    <div class=" container">        
+        <form asp-controller="Mark" asp-action="InsertBatch">       
+                @Html.Partial("EditableMarkPartial", Model.MarksData.ToList())
+                <div class="form-group">
+                    <input type="submit" value="Зберегти" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+</div>
+<div>
+    <a asp-action="Index">Назад</a>
+</div>

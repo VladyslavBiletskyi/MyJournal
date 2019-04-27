@@ -16,6 +16,8 @@ namespace MyJournal.Services.Extensibility.Services
 
         ApplicationUser FindUser(int id);
 
+        ApplicationUser FindUser(string login);
+
         bool Update(ApplicationUser user);
     }
 }
