@@ -50,7 +50,7 @@ namespace MyJournal.WebApi.Controllers
 
             var daysFromMonday = (7 - ((int)DayOfWeek.Monday - (int)DateTime.Today.DayOfWeek + 7) % 7) % 7;
 
-            var markGroups = markService.GetMarks(user, DateTime.Today.AddDays(-daysFromMonday), DateTime.Today.AddDays(1));
+            var markGroups = markService.GetMarksWithSkips(user, DateTime.Today.AddDays(-daysFromMonday), DateTime.Today.AddDays(1));
 
             var convertedMarks = markGroups.ToDictionary(x => x.Key, x => x.Value.Select(value =>
                 new DisplayMarkModel

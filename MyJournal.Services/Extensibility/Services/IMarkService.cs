@@ -9,6 +9,8 @@ namespace MyJournal.Services.Extensibility.Services
     {
         ValidationResult InsertBatch(IEnumerable<Mark> marks);
 
+        IDictionary<DateTime, IEnumerable<Mark>> GetMarksWithSkips(Student student, DateTime fromDay, DateTime toDay);
+
         IDictionary<DateTime, IEnumerable<Mark>> GetMarks(Student student, DateTime fromDay, DateTime toDay);
     }
 }

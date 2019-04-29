@@ -20,6 +20,19 @@ namespace MyJournal.Services.Services
             this.lessonSkipRepository = lessonSkipRepository;
         }
 
+        public IDictionary<DateTime, IEnumerable<Mark>> GetMarksWithSkips(Student student, DateTime fromDay, DateTime toDay)
+        {
+            var userMarks = markRepository.Instances().Where(x => x.Student == student && x.Lesson.DateTime >= fromDay && x.Lesson.DateTime < toDay).ToList();
+            var userSkips = lessonSkipRepository.Instances().Where(x => x.Student == student && x.Lesson.DateTime >= fromDay && x.Lesson.DateTime < toDay).ToList();
+            return userMarks.Concat(userSkips.Select(x => new Mark
+                {
+                    Lesson = x.Lesson,
+                    Student = x.Student,
+                    LessonSkip = x
+                }))
+                .GroupBy(x => x.Lesson.DateTime.Date, x => x).ToDictionary(x => x.Key, x => x.Select(value => value));
+        }
+
         public IDictionary<DateTime, IEnumerable<Mark>> GetMarks(Student student, DateTime fromDay, DateTime toDay)
         {
             var userMarks = markRepository.Instances().Where(x => x.Student == student && x.Lesson.DateTime >= fromDay && x.Lesson.DateTime < toDay).ToList();
@@ -34,7 +47,7 @@ namespace MyJournal.Services.Services
             {
                 validationResults.Add("Помилка при реєстрації пропусків");
             }
-            if (!markRepository.BatchInsert(marks.Where(mark => mark.Grade >=0)))
+            if (!markRepository.BatchInsert(marks.Where(mark => mark.Grade != null)))
             {
                 validationResults.Add("Помилка при виставленні оцінок");
             }
