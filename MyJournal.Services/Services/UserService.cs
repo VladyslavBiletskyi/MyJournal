@@ -70,8 +70,8 @@ namespace MyJournal.Services.Services
             var teacher = user as Teacher;
             if (teacher != null)
             {
-                var original = teacherRepository.Find(teacher.Id);
-                var newSubjectRelations = teacher.SubjectRelations.Except(original.SubjectRelations).ToList();
+                var originalSubjectRelations = teacherSubjectRelationshipRepository.Instances().Where(x => x.TeacherId == teacher.Id).ToList();
+                var newSubjectRelations = teacher.SubjectRelations.Except(originalSubjectRelations).ToList();
                 var isSucceeded = teacherRepository.TryUpdateInstance(teacher);
                 if (isSucceeded && newSubjectRelations.Any())
                 {
