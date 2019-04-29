@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using MyJournal.Domain.Entities;
 using MyJournal.Services.Extensibility.Services;
 using MyJournal.WebApi.Extensibility.Formatters;
+using MyJournal.WebApi.Extensibility.Providers;
 using MyJournal.WebApi.Models.Lesson;
 using MyJournal.WebApi.Models.Mark;
 
@@ -12,17 +13,20 @@ namespace MyJournal.WebApi.Controllers
 {
     public class LessonController : Controller
     {
-        private IUserService userService;
-        private ILessonService lessonService;
-        private IGroupNameFormatter groupNameFormatter;
-        private ISubjectNameFormatter subjectNameFormatter;
+        private readonly IUserService userService;
+        private readonly ILessonService lessonService;
+        private readonly IGroupNameFormatter groupNameFormatter;
+        private readonly ISubjectNameFormatter subjectNameFormatter;
+        private readonly ICurrentUserProvider currentUserProvider;
 
-        public LessonController(IUserService userService, ILessonService lessonService, IGroupNameFormatter groupNameFormatter, ISubjectNameFormatter subjectNameFormatter)
+        public LessonController(
+            IUserService userService, ILessonService lessonService, IGroupNameFormatter groupNameFormatter, ISubjectNameFormatter subjectNameFormatter, ICurrentUserProvider currentUserProvider)
         {
             this.userService = userService;
             this.lessonService = lessonService;
             this.groupNameFormatter = groupNameFormatter;
             this.subjectNameFormatter = subjectNameFormatter;
+            this.currentUserProvider = currentUserProvider;
         }
 
         [HttpGet]
@@ -83,8 +87,7 @@ namespace MyJournal.WebApi.Controllers
         [Authorize(Policy = Constants.TeacherPolicyName)]
         public IActionResult Create(CreateLessonModel model)
         {
-            var login = User.Claims.FirstOrDefault(x => x.Type == Constants.UserLoginClaimName)?.Value;
-            var teacher = userService.FindUser(login) as Teacher;
+            var teacher = currentUserProvider.GetCurrentUser<Teacher>(User);
             if (teacher == null || !(IsTeacherAssociatedForGroup(teacher, model.GroupId) || IsTeacherAssociatedForSubject(teacher, model.SubjectId)))
             {
                 return RedirectToAction("Index");

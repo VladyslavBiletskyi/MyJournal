@@ -27,6 +27,14 @@ namespace MyJournal.WebApi.Controllers
             return View();
         }
 
+        [HttpGet]
+        [Authorize]
+        public IActionResult MarksByWeek()
+        {
+
+            return View();
+        }
+
         [HttpPost]
         [Authorize(Policy = Constants.TeacherPolicyName)]
         public IActionResult InsertBatch([FromForm]IEnumerable<LessonMarkModel> model)

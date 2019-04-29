@@ -2,7 +2,9 @@
 using MyJournal.Domain.Extensibility;
 using MyJournal.WebApi.Controllers;
 using MyJournal.WebApi.Extensibility.Formatters;
+using MyJournal.WebApi.Extensibility.Providers;
 using MyJournal.WebApi.Formatters;
+using MyJournal.WebApi.Providers;
 
 namespace MyJournal.WebApi
 {
@@ -16,6 +18,7 @@ namespace MyJournal.WebApi
 
             services.AddTransient<IGroupNameFormatter, GroupNameFormatter>();
             services.AddTransient<ISubjectNameFormatter, SubjectNameFormatter>();
+            services.AddTransient<ICurrentUserProvider, CurrentUserProvider>();
         }
     }
 }
