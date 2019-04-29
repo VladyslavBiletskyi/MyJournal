@@ -10,7 +10,7 @@ using MyJournal.Domain.Data;
 namespace MyJournal.Domain.Migrations
 {
     [DbContext(typeof(MyJournalDbContext))]
-    [Migration("20190429102320_AttendsReworkedToLessonSkips")]
+    [Migration("20190429104401_AttendsReworkedToLessonSkips")]
     partial class AttendsReworkedToLessonSkips
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -107,7 +107,7 @@ namespace MyJournal.Domain.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("Attends");
+                    b.ToTable("LessonSkips");
                 });
 
             modelBuilder.Entity("MyJournal.Domain.Entities.Mark", b =>

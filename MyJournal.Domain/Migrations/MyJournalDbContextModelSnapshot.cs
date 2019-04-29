@@ -105,7 +105,7 @@ namespace MyJournal.Domain.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("Attends");
+                    b.ToTable("LessonSkips");
                 });
 
             modelBuilder.Entity("MyJournal.Domain.Entities.Mark", b =>
