@@ -40,6 +40,31 @@ namespace MyJournal.WebApi.Controllers
 
         [HttpGet]
         [Authorize]
+        public IActionResult MarksForTimeSpan()
+        {
+            var model = new TimeSpanModel()
+            {
+                DateFrom = GetDateOfNearestMonday(),
+                DateTo = DateTime.Today
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult MarksForTimeSpan(TimeSpanModel model)
+        {
+            var user = currentUserProvider.GetCurrentUser<Student>(User);
+            if (user == null)
+            {
+                return View(model);
+            }
+
+            return GetMarksForTimeSpan(user, model.DateFrom, model.DateTo);
+        }
+
+        [HttpGet]
+        [Authorize]
         public IActionResult MarksForWeek()
         {
             var user = currentUserProvider.GetCurrentUser<Student>(User);
@@ -48,18 +73,9 @@ namespace MyJournal.WebApi.Controllers
                 return RedirectToAction("Index");
             }
 
-            var daysFromMonday = (7 - ((int)DayOfWeek.Monday - (int)DateTime.Today.DayOfWeek + 7) % 7) % 7;
+            
 
-            var markGroups = markService.GetMarksWithSkips(user, DateTime.Today.AddDays(-daysFromMonday), DateTime.Today.AddDays(1));
-
-            var convertedMarks = markGroups.ToDictionary(x => x.Key, x => x.Value.Select(value =>
-                new DisplayMarkModel
-                {
-                    LessonName = subjectNameFormatter.Format(value.Lesson.Subject),
-                    Mark = value.Grade,
-                    NotPresent = value.LessonSkip != null
-                }));
-            return View("Display",convertedMarks);
+            return GetMarksForTimeSpan(user, GetDateOfNearestMonday(), DateTime.Today);
         }
 
         [HttpPost]
@@ -95,6 +111,26 @@ namespace MyJournal.WebApi.Controllers
 
             markService.InsertBatch(marksForSaving);
             return RedirectToAction("Index", "Lesson");
+        }
+
+        private IActionResult GetMarksForTimeSpan(Student user, DateTime dateFrom, DateTime dateTo)
+        {
+            var markGroups = markService.GetMarksWithSkips(user, dateFrom, dateTo.AddDays(1));
+
+            var convertedMarks = markGroups.ToDictionary(x => x.Key, x => x.Value.Select(value =>
+                new DisplayMarkModel
+                {
+                    LessonName = subjectNameFormatter.Format(value.Lesson.Subject),
+                    Mark = value.Grade,
+                    NotPresent = value.LessonSkip != null
+                }));
+            return View("Display", convertedMarks);
+        }
+
+        private DateTime GetDateOfNearestMonday()
+        {
+            var daysFromMonday = (7 - ((int)DayOfWeek.Monday - (int)DateTime.Today.DayOfWeek + 7) % 7) % 7;
+            return DateTime.Today.AddDays(-daysFromMonday);
         }
 
         private void FixWrongPresenceData(IEnumerable<LessonMarkModel> model)
