@@ -10,11 +10,13 @@ namespace MyJournal.Services.Services
     {
         private readonly ITeacherRepository teacherRepository;
         private readonly IStudentRepository studentRepository;
+        private readonly ITeacherSubjectRelationshipRepository teacherSubjectRelationshipRepository;
 
-        public UserService(ITeacherRepository teacherRepository, IStudentRepository studentRepository)
+        public UserService(ITeacherRepository teacherRepository, IStudentRepository studentRepository, ITeacherSubjectRelationshipRepository teacherSubjectRelationshipRepository)
         {
             this.teacherRepository = teacherRepository;
             this.studentRepository = studentRepository;
+            this.teacherSubjectRelationshipRepository = teacherSubjectRelationshipRepository;
         }
 
         public IEnumerable<ApplicationUser> GetTeachers()
@@ -68,7 +70,18 @@ namespace MyJournal.Services.Services
             var teacher = user as Teacher;
             if (teacher != null)
             {
-                return teacherRepository.TryUpdateInstance(teacher);
+                var original = teacherRepository.Find(teacher.Id);
+                var newSubjectRelations = teacher.SubjectRelations.Except(original.SubjectRelations).ToList();
+                var isSucceeded = teacherRepository.TryUpdateInstance(teacher);
+                if (isSucceeded && newSubjectRelations.Any())
+                {
+                    foreach (var teacherSubjectRelation in newSubjectRelations)
+                    {
+                        teacherSubjectRelationshipRepository.CreateInstance(teacherSubjectRelation);
+                    }
+                }
+
+                return isSucceeded;
             }
             else
             {

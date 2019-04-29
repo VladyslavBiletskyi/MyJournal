@@ -18,6 +18,7 @@ namespace MyJournal.Domain
             services.AddTransient<IMessageRepository, MessageRepository>();
             services.AddTransient<ITeacherRepository, TeacherRepository>();
             services.AddTransient<IStudentRepository, StudentRepository>();
+            services.AddTransient<ITeacherSubjectRelationshipRepository, TeacherSubjectRelationshipRepository>();
         }
     }
 }
