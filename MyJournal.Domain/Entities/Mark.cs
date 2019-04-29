@@ -8,6 +8,10 @@ namespace MyJournal.Domain.Entities
 
         public int Grade { get; set; }
 
+        public Student Student { get; set; }
+
+        public Lesson Lesson { get; set; }
+
         public DateTime UpdateTime { get; set; }
     }
 }

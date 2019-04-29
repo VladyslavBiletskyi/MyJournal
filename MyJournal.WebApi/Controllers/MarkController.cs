@@ -5,23 +5,28 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyJournal.Domain.Entities;
 using MyJournal.Services.Extensibility.Services;
+using MyJournal.WebApi.Extensibility.Providers;
 using MyJournal.WebApi.Models.Mark;
 
 namespace MyJournal.WebApi.Controllers
 {
     public class MarkController : Controller
     {
-        private IMarkService markService;
-        private IUserService userService;
-        private ILessonService lessonService;
+        private readonly IMarkService markService;
+        private readonly IUserService userService;
+        private readonly ILessonService lessonService;
+        private readonly ICurrentUserProvider currentUserProvider;
 
-        public MarkController(IMarkService markService, IUserService userService, ILessonService lessonService)
+        public MarkController(IMarkService markService, IUserService userService, ILessonService lessonService, ICurrentUserProvider currentUserProvider)
         {
             this.markService = markService;
             this.userService = userService;
             this.lessonService = lessonService;
+            this.currentUserProvider = currentUserProvider;
         }
 
+        [HttpGet]
+        [Authorize]
         public IActionResult Index()
         {
             return View();
@@ -31,7 +36,11 @@ namespace MyJournal.WebApi.Controllers
         [Authorize]
         public IActionResult MarksByWeek()
         {
-
+            var user = currentUserProvider.GetCurrentUser<Student>(User);
+            if (user == null)
+            {
+                return RedirectToAction("Index");
+            }
             return View();
         }
 
@@ -47,15 +56,23 @@ namespace MyJournal.WebApi.Controllers
             FixWrongPresenceData(model);
             var lesson = lessonService.Get(model.First().LessonId);
 
-            var marksForSaving = model.Select(x => new Mark
+            var marksForSaving = model.Select(x =>
             {
-                Attend = x.NotPresent ? null : new Attend()
+                var student = userService.FindStudent(x.StudentId);
+                return new Mark
                 {
-                    Student = userService.FindStudent(x.StudentId),
-                    Lesson = lesson
-                },
-                Grade = x.Mark ?? -1,
-                UpdateTime = DateTime.Now
+                    LessonSkip = x.NotPresent
+                        ? new LessonSkip()
+                        {
+                            Student = student,
+                            Lesson = lesson
+                        }
+                        : null,
+                    Grade = x.Mark ?? -1,
+                    Lesson = lesson,
+                    Student = student,
+                    UpdateTime = DateTime.Now
+                };
             }).ToList();
 
             markService.InsertBatch(marksForSaving);
