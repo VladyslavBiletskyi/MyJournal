@@ -9,13 +9,13 @@
         <div>
             @Html.HiddenFor(x => x[i].LessonId)
         </div>
-        <div class="col-2">
+        <div class="col-4">
             @Html.DisplayFor(x => x[i].StudentName)
         </div>
-        <div class="col-2">
+        <div class="col-1">
             <input asp-for="@Model[i].Mark" class="form-control"/>
         </div>
-        <div class="col-2">
+        <div class="col-1">
             <input asp-for="@Model[i].NotPresent" class="form-control"/>
         </div>
     </div>
