@@ -26,7 +26,7 @@ namespace MyJournal.Domain.Repositories
                 return false;
             }
 
-            original.Attend = instance.Attend;
+            original.LessonSkip = instance.LessonSkip;
             original.Grade = instance.Grade;
             original.UpdateTime = DateTime.Now;
             DatabaseContext.SaveChanges();

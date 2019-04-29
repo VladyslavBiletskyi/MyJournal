@@ -13,7 +13,7 @@ namespace MyJournal.Domain
             services.AddTransient<ISubjectRepository, SubjectRepository>();
             services.AddTransient<IGroupRepository, GroupRepository>();
             services.AddTransient<ILessonRepository, LessonRepository>();
-            services.AddTransient<IAttendRepository, AttendRepository>();
+            services.AddTransient<ILessonSkipRepository, LessonSkipRepository>();
             services.AddTransient<IMarkRepository, MarkRepository>();
             services.AddTransient<IMessageRepository, MessageRepository>();
             services.AddTransient<ITeacherRepository, TeacherRepository>();

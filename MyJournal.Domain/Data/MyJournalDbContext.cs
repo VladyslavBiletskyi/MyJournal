@@ -16,7 +16,7 @@ namespace MyJournal.Domain.Data
         {
         }
 
-        public DbSet<Attend> Attends { get; set; }
+        public DbSet<LessonSkip> LessonSkips { get; set; }
 
         public DbSet<Group> Groups { get; set; }
 

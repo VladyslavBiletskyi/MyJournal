@@ -1,6 +1,6 @@
 ﻿namespace MyJournal.Domain.Entities
 {
-    public class Attend : BaseInstance
+    public class LessonSkip : BaseInstance
     {
         public Student Student { get; set; }
 

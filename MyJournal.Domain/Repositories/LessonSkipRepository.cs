@@ -5,18 +5,18 @@ using MyJournal.Domain.Extensibility.Repositories;
 
 namespace MyJournal.Domain.Repositories
 {
-    public class AttendRepository : RepositoryBase<Attend>, IAttendRepository
+    public class LessonSkipRepository : RepositoryBase<LessonSkip>, ILessonSkipRepository
     {
-        public AttendRepository(MyJournalDbContext databaseContext) : base(databaseContext)
+        public LessonSkipRepository(MyJournalDbContext databaseContext) : base(databaseContext)
         {
         }
 
-        public bool BatchInsert(IEnumerable<Attend> instances)
+        public bool BatchInsert(IEnumerable<LessonSkip> instances)
         {
             return DatabaseContext.CreateInstances(instances);
         }
 
-        public override bool TryUpdateInstance(Attend instance)
+        public override bool TryUpdateInstance(LessonSkip instance)
         {
             var original = Find(instance.Id);
             if (original == null)
