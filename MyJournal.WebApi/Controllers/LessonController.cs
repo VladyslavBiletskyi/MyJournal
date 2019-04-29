@@ -88,9 +88,15 @@ namespace MyJournal.WebApi.Controllers
         public IActionResult Create(CreateLessonModel model)
         {
             var teacher = currentUserProvider.GetCurrentUser<Teacher>(User);
-            if (teacher == null || !(IsTeacherAssociatedForGroup(teacher, model.GroupId) || IsTeacherAssociatedForSubject(teacher, model.SubjectId)))
+            if (teacher == null)
             {
                 return RedirectToAction("Index");
+            }
+
+            if (!(IsTeacherAssociatedForGroup(teacher, model.GroupId) || IsTeacherAssociatedForSubject(teacher, model.SubjectId)))
+            {
+                ModelState.AddModelError(nameof(model.TeacherId), "Тільки викладач, що може викладати даний предмет або є класним керівником класу, може ставити урок.");
+                return View();
             }
 
             var lessonTeacher = userService.FindTeacher(model.TeacherId);
