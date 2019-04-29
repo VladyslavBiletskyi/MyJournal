@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -93,7 +94,19 @@ namespace MyJournal.WebApi.Controllers
                 return RedirectToAction("Index");
             }
 
-            if (!(IsTeacherAssociatedForGroup(teacher, model.GroupId) || IsTeacherAssociatedForSubject(teacher, model.SubjectId)))
+            if (model.DateTime < DateTime.Today.AddYears(-1))
+            {
+                ModelState.AddModelError(nameof(model.DateTime), "Вказана недійсна дата.");
+                return View();
+            }
+
+            if (model.GroupId == -1)
+            {
+                ModelState.AddModelError(nameof(model.GroupId), "Клас не вказаний.");
+                return View();
+            }
+
+            if (!IsTeacherAssociatedForGroup(teacher, model.GroupId) && !IsTeacherAssociatedForSubject(teacher, model.SubjectId))
             {
                 ModelState.AddModelError(nameof(model.TeacherId), "Тільки викладач, що може викладати даний предмет або є класним керівником класу, може ставити урок.");
                 return View();
@@ -122,7 +135,7 @@ namespace MyJournal.WebApi.Controllers
 
         private bool IsTeacherAssociatedForSubject(Teacher teacher, int subjectId)
         {
-            return teacher.Subjects != null && teacher.Subjects.Any(x => x.Id == subjectId);
+            return teacher.SubjectRelations != null && teacher.SubjectRelations.Any(x => x.SubjectId == subjectId);
         }
 
         private bool IsTeacherAssociatedForGroup(Teacher teacher, int groupId)

@@ -32,9 +32,27 @@ namespace MyJournal.Domain.Data
 
         public DbSet<Teacher> Teachers { get; set; }
 
+        public DbSet<TeacherSubjectRelation> TeacherSubjectRelations { get; set; }
+
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.TrackAll);
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<TeacherSubjectRelation>()
+                .HasOne(x => x.Teacher)
+                .WithMany(x => x.SubjectRelations)
+                .HasForeignKey(x => x.TeacherId);
+
+            modelBuilder.Entity<TeacherSubjectRelation>()
+                .HasOne(x => x.Subject)
+                .WithMany()
+                .HasForeignKey(x => x.SubjectId);
+
+            base.OnModelCreating(modelBuilder);
         }
 
         public IQueryable<TInstance> Instances<TInstance>() where TInstance : class

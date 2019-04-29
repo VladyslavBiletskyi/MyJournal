@@ -9,6 +9,8 @@
     <Compile Remove="Migrations\20190427150241_GroupStudentRelationshipsAdded.Designer.cs" />
     <Compile Remove="Migrations\20190429104049_AttendsReworkedToLessonSkips.cs" />
     <Compile Remove="Migrations\20190429104049_AttendsReworkedToLessonSkips.Designer.cs" />
+    <Compile Remove="Migrations\20190429135226_TeacherForSubjectAssigningFixed.cs" />
+    <Compile Remove="Migrations\20190429135226_TeacherForSubjectAssigningFixed.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

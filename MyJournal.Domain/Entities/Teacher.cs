@@ -9,6 +9,6 @@ namespace MyJournal.Domain.Entities
             Role = nameof(Teacher);
         }
 
-        public virtual ICollection<Subject> Subjects { get; set; }
+        public virtual ICollection<TeacherSubjectRelation> SubjectRelations { get; set; }
     }
 }

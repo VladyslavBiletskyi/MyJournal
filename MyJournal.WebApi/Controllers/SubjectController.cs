@@ -80,12 +80,12 @@ namespace MyJournal.WebApi.Controllers
                 return View();
             }
 
-            if (teacher.Subjects.Any(x => x.Id == model.SubjectId))
+            if (teacher.SubjectRelations.Any(x => x.SubjectId == model.SubjectId))
             {
                 ModelState.AddModelError(nameof(model.TeacherId), "Викладач вже зареєстрований на предмет");
                 return View();
             }
-            teacher.Subjects.Add(subject);
+            teacher.SubjectRelations.Add(new TeacherSubjectRelation{SubjectId = subject.Id, TeacherId = teacher.Id});
             userService.Update(teacher);
 
             return RedirectToAction("Index");
