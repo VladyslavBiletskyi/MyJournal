@@ -1,10 +1,13 @@
 @if (User.Identity.IsAuthenticated)
 {  
-        <ul class="navbar-nav">
-            <li class="nav-item"><a asp-area="" asp-controller="Account" asp-action="Index" class="nav-link text-dark fas fa-user">Доброго дня, @User.Claims.FirstOrDefault(claim => claim.Type == "name")?.Value!</a></li>
+    <ul class="navbar-nav">
+        <li class="nav-item"><a asp-area="" asp-controller="Account" asp-action="Index" class="nav-link text-dark fas fa-user">Доброго дня, @User.Claims.FirstOrDefault(claim => claim.Type == "name")?.Value!</a></li>
+        @if (User.Claims.FirstOrDefault(x => x.Type == Constants.RoleClaimName)?.Value == Constants.TeacherRoleName)
+        {
             <li class="nav-item"><a asp-area="" asp-controller="Account" asp-action="Register" class="nav-link text-dark">Зареєструвати користувача</a></li>
-            <li class="nav-item"><a asp-area="" asp-controller="Account" asp-action="Logout" class="nav-link text-dark">Вихід</a></li>
-        </ul>
+        }
+        <li class="nav-item"><a asp-area="" asp-controller="Account" asp-action="Logout" class="nav-link text-dark">Вихід</a></li>
+    </ul>
 }
 else
 {

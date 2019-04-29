@@ -18,6 +18,8 @@ namespace MyJournal.WebApi
 
             services.AddTransient<IGroupNameFormatter, GroupNameFormatter>();
             services.AddTransient<ISubjectNameFormatter, SubjectNameFormatter>();
+            services.AddTransient<IUserNameFormatter, UserNameFormatter>();
+
             services.AddTransient<ICurrentUserProvider, CurrentUserProvider>();
         }
     }

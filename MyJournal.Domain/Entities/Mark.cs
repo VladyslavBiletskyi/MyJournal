@@ -6,7 +6,7 @@ namespace MyJournal.Domain.Entities
     {
         public LessonSkip LessonSkip { get; set; }
 
-        public int Grade { get; set; }
+        public int? Grade { get; set; }
 
         public Student Student { get; set; }
 

@@ -1,0 +1,32 @@
+﻿@model IDictionary<DateTime, IEnumerable<MyJournal.WebApi.Models.Mark.DisplayMarkModel>>
+@{
+    ViewData["Title"] = "Мої Оцінки";
+}
+
+<h1>Оцінки</h1>
+
+<div class="container">
+        @foreach (var value in Model)
+        {
+            <div class="row font-weight-bold">
+                <div class="col-1">
+                    <p class="text-center ">@value.Key.Day.@value.Key.Month</p>
+                </div>
+                @foreach (var mark in value.Value)
+                {
+                    <div class="col-2">
+                        <p class="text-center">@mark.LessonName</p>
+                        @if (mark.NotPresent)
+                        {
+                            <p class="text-center alert-danger">Відсутній</p>
+                        }
+                        else
+                        {
+                            <p class="text-center">@mark.Mark</p>
+                        }
+                    </div>
+                }
+            </div>
+            <hr class="dropdown-divider"/>
+        }
+</div>

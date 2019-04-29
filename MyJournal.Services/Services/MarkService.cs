@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 using MyJournal.Domain.Entities;
 using MyJournal.Domain.Extensibility.Repositories;
 using MyJournal.Services.Extensibility.Services;
@@ -19,10 +20,11 @@ namespace MyJournal.Services.Services
             this.lessonSkipRepository = lessonSkipRepository;
         }
 
-        /*public IGrouping<Mark> GetMarks(Student student, TimeSpan timespan)
+        public IDictionary<DateTime, IEnumerable<Mark>> GetMarks(Student student, DateTime fromDay, DateTime toDay)
         {
-            var userMarks = markRepository.Instances().Where(x => x.)
-        }*/
+            var userMarks = markRepository.Instances().Where(x => x.Student == student && x.Lesson.DateTime >= fromDay && x.Lesson.DateTime < toDay).ToList();
+            return userMarks.GroupBy(x => x.Lesson.DateTime.Date, x => x).ToDictionary(x => x.Key, x => x.Select(value => value));
+        }
 
         public ValidationResult InsertBatch(IEnumerable<Mark> marks)
         {

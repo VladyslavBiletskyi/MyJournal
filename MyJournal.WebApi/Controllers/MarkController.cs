@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 using MyJournal.Domain.Entities;
 using MyJournal.Services.Extensibility.Services;
+using MyJournal.WebApi.Extensibility.Formatters;
 using MyJournal.WebApi.Extensibility.Providers;
 using MyJournal.WebApi.Models.Mark;
 
@@ -16,13 +18,17 @@ namespace MyJournal.WebApi.Controllers
         private readonly IUserService userService;
         private readonly ILessonService lessonService;
         private readonly ICurrentUserProvider currentUserProvider;
+        private readonly IUserNameFormatter userNameFormatter;
+        private readonly ISubjectNameFormatter subjectNameFormatter;
 
-        public MarkController(IMarkService markService, IUserService userService, ILessonService lessonService, ICurrentUserProvider currentUserProvider)
+        public MarkController(IMarkService markService, IUserService userService, ILessonService lessonService, ICurrentUserProvider currentUserProvider, IUserNameFormatter userNameFormatter, ISubjectNameFormatter subjectNameFormatter)
         {
             this.markService = markService;
             this.userService = userService;
             this.lessonService = lessonService;
             this.currentUserProvider = currentUserProvider;
+            this.userNameFormatter = userNameFormatter;
+            this.subjectNameFormatter = subjectNameFormatter;
         }
 
         [HttpGet]
@@ -34,14 +40,26 @@ namespace MyJournal.WebApi.Controllers
 
         [HttpGet]
         [Authorize]
-        public IActionResult MarksByWeek()
+        public IActionResult MarksForWeek()
         {
             var user = currentUserProvider.GetCurrentUser<Student>(User);
             if (user == null)
             {
                 return RedirectToAction("Index");
             }
-            return View();
+
+            var daysFromMonday = (7 - ((int)DayOfWeek.Monday - (int)DateTime.Today.DayOfWeek + 7) % 7) % 7;
+
+            var markGroups = markService.GetMarks(user, DateTime.Today.AddDays(-daysFromMonday), DateTime.Today.AddDays(1));
+
+            var convertedMarks = markGroups.ToDictionary(x => x.Key, x => x.Value.Select(value =>
+                new DisplayMarkModel
+                {
+                    LessonName = subjectNameFormatter.Format(value.Lesson.Subject),
+                    Mark = value.Grade,
+                    NotPresent = value.LessonSkip != null
+                }));
+            return View("Display",convertedMarks);
         }
 
         [HttpPost]
@@ -68,7 +86,7 @@ namespace MyJournal.WebApi.Controllers
                             Lesson = lesson
                         }
                         : null,
-                    Grade = x.Mark ?? -1,
+                    Grade = x.Mark,
                     Lesson = lesson,
                     Student = student,
                     UpdateTime = DateTime.Now
