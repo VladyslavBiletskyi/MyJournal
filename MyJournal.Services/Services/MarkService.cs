@@ -20,16 +20,18 @@ namespace MyJournal.Services.Services
             this.lessonSkipRepository = lessonSkipRepository;
         }
 
+        public IEnumerable<Mark> GetMarksOfLesson(Lesson lesson)
+        {
+            return markRepository.Instances().Where(x => x.Lesson == lesson).ToList()
+                .Concat(lessonSkipRepository.Instances()
+                .Where(x => x.Lesson == lesson).Select(LessonSkipToMark));
+        }
+
         public IDictionary<DateTime, IEnumerable<Mark>> GetMarksWithSkips(Student student, DateTime fromDay, DateTime toDay)
         {
             var userMarks = markRepository.Instances().Where(x => x.Student == student && x.Lesson.DateTime >= fromDay && x.Lesson.DateTime < toDay).ToList();
             var userSkips = lessonSkipRepository.Instances().Where(x => x.Student == student && x.Lesson.DateTime >= fromDay && x.Lesson.DateTime < toDay).ToList();
-            return userMarks.Concat(userSkips.Select(x => new Mark
-                {
-                    Lesson = x.Lesson,
-                    Student = x.Student,
-                    LessonSkip = x
-                }))
+            return userMarks.Concat(userSkips.Select(LessonSkipToMark))
                 .GroupBy(x => x.Lesson.DateTime.Date, x => x).ToDictionary(x => x.Key, x => x.Select(value => value));
         }
 
@@ -53,6 +55,16 @@ namespace MyJournal.Services.Services
             }
 
             return new ValidationResult(validationResults.ToArray());
+        }
+
+        private Mark LessonSkipToMark(LessonSkip skip)
+        {
+            return new Mark
+            {
+                Lesson = skip.Lesson,
+                Student = skip.Student,
+                LessonSkip = skip
+            };
         }
     }
 }

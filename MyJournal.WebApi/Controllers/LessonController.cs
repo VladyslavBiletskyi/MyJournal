@@ -19,15 +19,17 @@ namespace MyJournal.WebApi.Controllers
         private readonly IGroupNameFormatter groupNameFormatter;
         private readonly ISubjectNameFormatter subjectNameFormatter;
         private readonly ICurrentUserProvider currentUserProvider;
+        private readonly IMarkService markService;
 
         public LessonController(
-            IUserService userService, ILessonService lessonService, IGroupNameFormatter groupNameFormatter, ISubjectNameFormatter subjectNameFormatter, ICurrentUserProvider currentUserProvider)
+            IUserService userService, ILessonService lessonService, IGroupNameFormatter groupNameFormatter, ISubjectNameFormatter subjectNameFormatter, ICurrentUserProvider currentUserProvider, IMarkService markService)
         {
             this.userService = userService;
             this.lessonService = lessonService;
             this.groupNameFormatter = groupNameFormatter;
             this.subjectNameFormatter = subjectNameFormatter;
             this.currentUserProvider = currentUserProvider;
+            this.markService = markService;
         }
 
         [HttpGet]
@@ -41,17 +43,17 @@ namespace MyJournal.WebApi.Controllers
         [Authorize(Policy = Constants.TeacherPolicyName)]
         public IActionResult Display(int lessonId)
         {
-            return DisplayInternal(lessonId, "Display");
+            return DisplayInternal(lessonId, "Display", true);
         }
 
         [HttpGet]
         [Authorize(Policy = Constants.TeacherPolicyName)]
         public IActionResult Fill(int lessonId)
         {
-            return DisplayInternal(lessonId, "Fill");
+            return DisplayInternal(lessonId, "Fill", false);
         }
 
-        private IActionResult DisplayInternal(int lessonId, string viewName)
+        private IActionResult DisplayInternal(int lessonId, string viewName, bool shouldLoadValues)
         {
             var lesson = lessonService.Get(lessonId);
             if (lesson == null || lesson.Group == null)
@@ -59,11 +61,14 @@ namespace MyJournal.WebApi.Controllers
                 return RedirectToAction("Index");
             }
 
+
+            var marksByStudentId = shouldLoadValues? markService.GetMarksOfLesson(lesson).ToDictionary(x => x.Student.Id, x => x) : new Dictionary<int, Mark>();
+
             var markModels = lesson.Group.Students?.Select(x => new LessonMarkModel
             {
                 LessonId = lessonId,
-                Mark = null,
-                NotPresent = false,
+                Mark = shouldLoadValues && marksByStudentId.ContainsKey(x.Id) ? marksByStudentId[x.Id].Grade : null,
+                NotPresent = shouldLoadValues && marksByStudentId.ContainsKey(x.Id) && marksByStudentId[x.Id].LessonSkip != null,
                 StudentId = x.Id,
                 StudentName = $"{x.Surname} {x.FirstName} {x.LastName}"
             }) ?? new List<LessonMarkModel>();
@@ -131,6 +136,27 @@ namespace MyJournal.WebApi.Controllers
             }
 
             return RedirectToAction("Fill", new {lessonId = lesson.Data.Id});
+        }
+
+        [HttpGet]
+        [Authorize(Policy = Constants.TeacherPolicyName)]
+        public IActionResult GroupLessons()
+        {
+            var currentUser = currentUserProvider.GetCurrentUser<Teacher>(User);
+            if (currentUser?.Group == null)
+            {
+                return View("GroupLessonsEmpty");
+            }
+
+            var lessonsForMonth = lessonService.GetLessonsOfGroupBetweenDates(currentUser.Group, DateTime.Today.AddMonths(-1), DateTime.Today.AddDays(1));
+
+            var converted = lessonsForMonth.ToDictionary(x => x.Key, x => x.Value.Select(value => new LessonListItemModel
+            {
+                LessonId = value.Id,
+                SubjectName = value.Subject.Name
+            }));
+
+            return View(converted);
         }
 
         private bool IsTeacherAssociatedForSubject(Teacher teacher, int subjectId)

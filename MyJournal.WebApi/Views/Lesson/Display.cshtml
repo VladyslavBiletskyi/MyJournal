@@ -1,38 +1,27 @@
 ﻿@model MyJournal.WebApi.Models.Lesson.LessonModel
 
-
-
 <h1>Урок</h1><p/>
 <h2>@Model.SubjectName - @Model.GroupName</h2>
 <div>
     <hr />
-    <table class="table-bordered">
-        <tr>
-            <td>
+    <div class="container">
+        <div class="row">
+            <div class="col-4">
                 П.І.Б.
-            </td>
-            <td>
+            </div>
+            <div class="col-1">
                 Оцінка
-            </td>
-            <td>
+            </div>
+            <div class="col-1">
                 Відсутній
-            </td>
-        </tr>
-        @foreach (var studentData in Model.MarksData)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(x => studentData.StudentName)
-                </td>
-                <td>
-                    @Html.DisplayFor(x => studentData.Mark)
-                </td>
-                <td>
-                    @Html.DisplayFor(x => studentData.NotPresent)
-                </td>
-            </tr>
-        }
-    </table>
+            </div>
+        </div>
+    </div>
+    <div class=" container">        
+        <form asp-controller="Mark" asp-action="InsertBatch">
+            <partial name="ReadonlyMarkPartial" model="Model.MarksData.ToList()"/>
+        </form>
+    </div>
 </div>
 <div>
     <a asp-action="Index">Назад</a>

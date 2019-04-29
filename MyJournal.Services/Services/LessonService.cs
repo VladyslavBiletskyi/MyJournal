@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using MyJournal.Domain.Entities;
 using MyJournal.Domain.Extensibility.Repositories;
 using MyJournal.Services.Extensibility.Services;
@@ -68,6 +69,13 @@ namespace MyJournal.Services.Services
         public Lesson Get(int lessonId)
         {
             return lessonRepository.Find(lessonId);
+        }
+
+        public IDictionary<DateTime, IEnumerable<Lesson>> GetLessonsOfGroupBetweenDates(Group group, DateTime fromDate, DateTime toDate)
+        {
+            return lessonRepository.Instances().Where(x => x.Group == group && x.DateTime.Date >= fromDate && x.DateTime <= toDate)
+                .GroupBy(x => x.DateTime.Date, x => x)
+                .ToDictionary(x => x.Key, x => x.Select(value => value));
         }
     }
 }
