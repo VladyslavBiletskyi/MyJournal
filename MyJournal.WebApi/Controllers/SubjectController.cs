@@ -73,7 +73,7 @@ namespace MyJournal.WebApi.Controllers
                 return View();
             }
 
-            var teacher = userService.FindUser(model.TeacherId) as Teacher;
+            var teacher = userService.FindTeacher(model.TeacherId);
             if (teacher == null)
             {
                 ModelState.AddModelError(nameof(model.TeacherId), "Викладача не знайдено");

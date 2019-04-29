@@ -32,10 +32,20 @@ namespace MyJournal.Services.Services
             return GetTeachers().Concat(GetStudents());
         }
 
+        public Teacher FindTeacher(int id)
+        {
+            return teacherRepository.Find(id);
+        }
+
+        public Student FindStudent(int id)
+        {
+            return studentRepository.Find(id);
+        }
+
         public ApplicationUser FindUser(int id)
         {
-            ApplicationUser teacher = teacherRepository.Find(id);
-            return teacher ?? studentRepository.Find(id);
+            ApplicationUser teacher = FindTeacher(id);
+            return teacher ?? FindStudent(id);
         }
 
         public ApplicationUser FindUser(string login)

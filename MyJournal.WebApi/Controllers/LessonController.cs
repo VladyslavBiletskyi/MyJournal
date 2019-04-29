@@ -90,7 +90,7 @@ namespace MyJournal.WebApi.Controllers
                 return RedirectToAction("Index");
             }
 
-            var lessonTeacher = userService.FindUser(model.TeacherId) as Teacher;
+            var lessonTeacher = userService.FindTeacher(model.TeacherId);
             if (lessonTeacher == null || !IsTeacherAssociatedForSubject(lessonTeacher, model.SubjectId))
             {
                 ModelState.AddModelError(nameof(model.TeacherId), "Викладач не може викладати даний предмет.");

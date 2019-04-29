@@ -63,6 +63,24 @@ namespace MyJournal.Domain.Data
             }
         }
 
+        public bool CreateInstances<TInstance>(IEnumerable<TInstance> instances) where TInstance : class
+        {
+            try
+            {
+                foreach (var instance in instances)
+                {
+                    Set<TInstance>().Add(instance);
+                }
+
+                SaveChanges();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         public bool TryRemoveInstance<TInstance>(TInstance instance) where TInstance : class
         {
             try

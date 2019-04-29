@@ -14,6 +14,10 @@ namespace MyJournal.Services.Extensibility.Services
 
         IEnumerable<ApplicationUser> GetUsers();
 
+        Teacher FindTeacher(int id);
+
+        Student FindStudent(int id);
+
         ApplicationUser FindUser(int id);
 
         ApplicationUser FindUser(string login);

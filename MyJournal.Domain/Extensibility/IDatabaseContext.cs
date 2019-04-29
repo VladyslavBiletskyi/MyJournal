@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace MyJournal.Domain.Extensibility
@@ -10,6 +11,8 @@ namespace MyJournal.Domain.Extensibility
         TInstance Find<TInstance>(Func<TInstance,bool> selector) where TInstance : class;
 
         bool CreateInstance<TInstance>(TInstance instance) where TInstance : class;
+
+        bool CreateInstances<TInstance>(IEnumerable<TInstance> instances) where TInstance : class;
 
         bool TryRemoveInstance<TInstance>(TInstance instance) where TInstance : class;
 
