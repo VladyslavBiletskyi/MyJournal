@@ -75,6 +75,7 @@ namespace MyJournal.Services.Services
         {
             return lessonRepository.Instances().Where(x => x.Group == group && x.DateTime.Date >= fromDate && x.DateTime <= toDate)
                 .GroupBy(x => x.DateTime.Date, x => x)
+                .OrderBy(x => x.Key)
                 .ToDictionary(x => x.Key, x => x.Select(value => value));
         }
     }

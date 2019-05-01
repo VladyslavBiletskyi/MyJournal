@@ -31,14 +31,13 @@ namespace MyJournal.Services.Services
         {
             var userMarks = markRepository.Instances().Where(x => x.Student == student && x.Lesson.DateTime >= fromDay && x.Lesson.DateTime < toDay).ToList();
             var userSkips = lessonSkipRepository.Instances().Where(x => x.Student == student && x.Lesson.DateTime >= fromDay && x.Lesson.DateTime < toDay).ToList();
-            return userMarks.Concat(userSkips.Select(LessonSkipToMark))
-                .GroupBy(x => x.Lesson.DateTime.Date, x => x).ToDictionary(x => x.Key, x => x.Select(value => value));
+            return OrderAndGroupMarks(userMarks.Concat(userSkips.Select(LessonSkipToMark)));
         }
 
         public IDictionary<DateTime, IEnumerable<Mark>> GetMarks(Student student, DateTime fromDay, DateTime toDay)
         {
             var userMarks = markRepository.Instances().Where(x => x.Student == student && x.Lesson.DateTime >= fromDay && x.Lesson.DateTime < toDay).ToList();
-            return userMarks.GroupBy(x => x.Lesson.DateTime.Date, x => x).ToDictionary(x => x.Key, x => x.Select(value => value));
+            return OrderAndGroupMarks(userMarks);
         }
 
         public ValidationResult InsertBatch(IEnumerable<Mark> marks)
@@ -55,6 +54,11 @@ namespace MyJournal.Services.Services
             }
 
             return new ValidationResult(validationResults.ToArray());
+        }
+
+        private IDictionary<DateTime, IEnumerable<Mark>> OrderAndGroupMarks(IEnumerable<Mark> marks)
+        {
+            return marks.GroupBy(x => x.Lesson.DateTime.Date, x => x).OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Select(value => value));
         }
 
         private Mark LessonSkipToMark(LessonSkip skip)
