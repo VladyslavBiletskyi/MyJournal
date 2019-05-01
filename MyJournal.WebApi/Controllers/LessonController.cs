@@ -75,6 +75,7 @@ namespace MyJournal.WebApi.Controllers
 
             return View(viewName, new LessonModel
             {
+                DateTime = lesson.DateTime,
                 LessonId = lessonId,
                 MarksData = markModels,
                 GroupName = groupNameFormatter.Format(lesson.Group),
