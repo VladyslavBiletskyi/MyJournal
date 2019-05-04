@@ -17,6 +17,10 @@ namespace MyJournal.WebApi.Providers
 
         public TUser GetCurrentUser<TUser>(ClaimsPrincipal user) where TUser : ApplicationUser
         {
+            if (user == null)
+            {
+                return null;
+            }
             var login = user.Claims.FirstOrDefault(x => x.Type == Constants.UserLoginClaimName)?.Value;
             return userService.FindUser(login) as TUser;
         }

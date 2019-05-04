@@ -21,6 +21,7 @@ namespace MyJournal.Services
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<ILessonService, LessonService>();
             services.AddTransient<IMarkService, MarkService>();
+            services.AddTransient<IMessageService, MessageService>();
         }
     }
 }

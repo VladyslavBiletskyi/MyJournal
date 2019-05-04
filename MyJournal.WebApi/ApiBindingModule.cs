@@ -15,6 +15,7 @@ namespace MyJournal.WebApi
             services.AddTransient<GroupController>();
             services.AddTransient<SubjectController>();
             services.AddTransient<UserController>();
+            services.AddTransient<MessageController>();
 
             services.AddTransient<IGroupNameFormatter, GroupNameFormatter>();
             services.AddTransient<ISubjectNameFormatter, SubjectNameFormatter>();
