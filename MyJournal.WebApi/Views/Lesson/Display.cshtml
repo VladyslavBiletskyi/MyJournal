@@ -1,6 +1,7 @@
-﻿@model MyJournal.WebApi.Models.Lesson.LessonModel
-
-<h1>Урок @Model.DateTime.Day.@Model.DateTime.Month</h1><p/>
+﻿@using MyJournal.WebApi.Extensibility.Formatters
+@model MyJournal.WebApi.Models.Lesson.LessonModel
+@inject IDateTimeFormatter DateTimeFormatter
+<h1>Урок @DateTimeFormatter.FormatWithoutTime(Model.DateTime)</h1><p/>
 <h2>@Model.SubjectName - @Model.GroupName</h2>
 <div>
     <hr />

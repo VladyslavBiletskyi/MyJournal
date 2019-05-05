@@ -5,6 +5,9 @@ namespace MyJournal.WebApi.Extensibility.Formatters
     public interface IUserNameFormatter
     {
         string FormatFull(ApplicationUser user);
+
+        string FormatWithoutSurname(ApplicationUser user);
+
         string FormatShort(ApplicationUser user);
     }
 }

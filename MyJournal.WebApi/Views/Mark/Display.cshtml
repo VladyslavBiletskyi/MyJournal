@@ -1,4 +1,6 @@
-﻿@model IDictionary<DateTime, IEnumerable<MyJournal.WebApi.Models.Mark.DisplayMarkModel>>
+﻿@using MyJournal.WebApi.Extensibility.Formatters
+@model IDictionary<DateTime, IEnumerable<MyJournal.WebApi.Models.Mark.DisplayMarkModel>>
+@inject IDateTimeFormatter DateTimeFormatter
 @{
     ViewData["Title"] = "Мої Оцінки";
 }
@@ -10,7 +12,7 @@
         {
             <div class="row font-weight-bold">
                 <div class="col-1">
-                    <p class="text-center ">@value.Key.Day.@value.Key.Month</p>
+                    <p class="text-center ">@DateTimeFormatter.FormatWithoutTime(value.Key)</p>
                 </div>
                 @foreach (var mark in value.Value)
                 {

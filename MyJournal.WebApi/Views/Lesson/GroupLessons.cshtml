@@ -1,4 +1,6 @@
-﻿@model Dictionary<DateTime, IEnumerable<MyJournal.WebApi.Models.Lesson.LessonListItemModel>>
+﻿@using MyJournal.WebApi.Extensibility.Formatters
+@model Dictionary<DateTime, IEnumerable<MyJournal.WebApi.Models.Lesson.LessonListItemModel>>
+@inject IDateTimeFormatter DateTimeFormatter
 @{
     ViewData["Title"] = "Заняття класу";
 }
@@ -7,17 +9,17 @@
 <div class="container">
     @foreach (var value in Model)
     {
-        <div class="row font-weight-bold">
-            <div class="col-1">
-                <p class="text-center ">@value.Key.Day.@value.Key.Month</p>
-            </div>
-            @foreach (var lesson in value.Value)
-            {
-                <div class="col-2">
-                    <a class="btn btn-light" asp-action="Display" asp-route-lessonId="@lesson.LessonId" >@lesson.SubjectName</a>
-                </div>
-            }
+    <div class="row font-weight-bold">
+        <div class="col-1">
+            <p class="text-center ">@DateTimeFormatter.FormatWithoutTime(value.Key)</p>
         </div>
-        <hr class="dropdown-divider"/>
+        @foreach (var lesson in value.Value)
+            {
+        <div class="col-2">
+            <a class="btn btn-light" asp-action="Display" asp-route-lessonId="@lesson.LessonId">@lesson.SubjectName</a>
+        </div>
+            }
+    </div>
+    <hr class="dropdown-divider" />
     }
 </div>
