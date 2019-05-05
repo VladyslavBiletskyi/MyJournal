@@ -155,7 +155,8 @@ namespace MyJournal.WebApi.Controllers
             var converted = lessonsForMonth.ToDictionary(x => x.Key, x => x.Value.Select(value => new LessonListItemModel
             {
                 LessonId = value.Id,
-                SubjectName = value.Subject.Name
+                SubjectName = value.Subject.Name,
+                IsForThematicMarks = value.IsForThematicMarks
             }));
 
             return View(converted);

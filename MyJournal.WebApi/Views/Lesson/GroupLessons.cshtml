@@ -15,9 +15,12 @@
         </div>
         @foreach (var lesson in value.Value)
             {
-        <div class="col-2">
-            <a class="btn btn-light" asp-action="Display" asp-route-lessonId="@lesson.LessonId">@lesson.SubjectName</a>
-        </div>
+                <div class="col-2">
+                    @{
+                        var lessonTitle = lesson.IsForThematicMarks ? $"[Тематичне оцінювання] {lesson.SubjectName}" : lesson.SubjectName;
+                    }
+                    <a class="btn btn-light" asp-action="Display" asp-route-lessonId="@lesson.LessonId">@lessonTitle</a>
+                </div>
             }
     </div>
     <hr class="dropdown-divider" />
