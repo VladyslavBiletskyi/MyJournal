@@ -4,7 +4,7 @@ namespace MyJournal.Domain.Entities
 {
     public class Message : BaseInstance
     {
-        public Teacher Sender { get; set; }
+        public ApplicationUser Sender { get; set; }
 
         public ApplicationUser Addressee { get; set; }
 

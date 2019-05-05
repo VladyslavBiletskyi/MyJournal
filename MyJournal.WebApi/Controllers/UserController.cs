@@ -19,10 +19,15 @@ namespace MyJournal.WebApi.Controllers
         }
 
         [HttpGet]
-        
         public IEnumerable<TeacherModel> GetTeachers()
         {
             return userService.GetTeachers().Select(x => new TeacherModel { TeacherId = x.Id, Name = userNameFormatter.FormatFull(x) });
+        }
+
+        [HttpGet]
+        public IEnumerable<UserModel> GetAllUsers()
+        {
+            return userService.GetUsers().OrderBy(x => x.Surname).Select(x => new UserModel {Name = userNameFormatter.FormatFull(x), Id = x.Id});
         }
     }
 }

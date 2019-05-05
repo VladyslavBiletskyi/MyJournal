@@ -1,6 +1,65 @@
-
+@model MyJournal.WebApi.Models.Message.MessageListModel
 @{
     ViewData["Title"] = "Листи";
 }
 
-<h1>Ваші листи</h1>
+<div class="container">
+    <div class="row">
+        <div class="col-md-10 font-weight-bold h2">Ваші листи</div>
+        <div class="col-md-2">
+            <a asp-controller="Message" asp-action ="NewMessage" class="btn btn-primary">Новий лист</a>
+        </div>
+    </div>
+    
+</div>
+<hr class="dropdown-divider"/>
+<table class="table table-light w-100 justify-content-center">
+    <tr class="font-weight-bold h3">
+        <td>
+            <div class="text-lg-center">Відправлені листи</div>
+        </td>
+        <td>
+            <div class="text-lg-center">Отримані листи</div>
+        </td>
+    </tr>
+    @{
+        int i = 0;
+    }
+    @for (; i < Math.Min(Model.SentMessages.Count, Model.ReceivedMessages.Count); i++)
+    {
+        <tr>
+            <td class="w-50">
+                <partial name="SentMessagePartial" model="@Model.SentMessages[i]"/>
+            </td>
+            <td class="w-50">
+                <partial name="ReceivedMessagePartial" model="@Model.ReceivedMessages[i]"/>
+
+            </td>
+        </tr>
+    }
+    @for (; i < Math.Max(Model.SentMessages.Count, Model.ReceivedMessages.Count); i++)
+    {
+        <tr>
+            <td class="w-50">
+                @if (Model.SentMessages.Count >= i + 1)
+                {
+                    <partial name="SentMessagePartial" model="@Model.SentMessages[i]"/>
+                }
+                else
+                {
+                    <span></span>
+                }
+            </td>
+            <td class="w-50">
+                @if (Model.ReceivedMessages.Count >= i + 1)
+                {
+                    <partial name="ReceivedMessagePartial" model="@Model.ReceivedMessages[i]" />
+                }
+                else
+                {
+                    <span></span>
+                }
+            </td>
+        </tr>
+    }
+</table>

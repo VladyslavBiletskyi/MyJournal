@@ -1,0 +1,11 @@
+﻿@using MyJournal.WebApi.Extensibility.Formatters
+@model MyJournal.WebApi.Models.Message.MessageModel
+@inject IDateTimeFormatter DateTimeFormatter
+
+@{
+    var displayClass = Model.Read ? "btn-light" : "btn-dark";
+}
+<a asp-controller="Message" asp-action="Display" asp-route-messageId="@Model.Id" class="font-weight-bold w-100 btn @displayClass">
+    <p>До: @Model.AddresseeName, @DateTimeFormatter.Format(Model.DateTime)</p>
+    <p>@Model.Text</p>
+</a>

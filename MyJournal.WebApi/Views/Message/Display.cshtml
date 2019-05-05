@@ -1,0 +1,28 @@
+﻿@model MyJournal.WebApi.Models.Message.MessageModel
+@{
+    ViewData["Title"] = "Лист";
+    var message = "";
+    if (Model.Read)
+    {
+        message = "Лист прочитано";
+    }
+    else
+    {
+        message = "Лист не прочитано";
+    }
+}
+<div>
+    <h4>Лист від @Model.SenderName до @Model.AddresseeName</h4>
+    <hr />
+    <div class="container">
+        <div class="font-weight-bold col-12 h5 justify-content-center">
+            @message
+        </div>
+        <hr />
+        <div class="col-12">@Model.Text</div>
+        <hr />
+    </div>
+</div>
+<div>
+    <a asp-action="Index">Назад</a>
+</div>
