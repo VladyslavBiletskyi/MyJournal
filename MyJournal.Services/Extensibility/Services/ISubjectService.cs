@@ -7,6 +7,8 @@ namespace MyJournal.Services.Extensibility.Services
     {
         IEnumerable<Subject> GetAll();
 
+        IEnumerable<Subject> GetSubjectsOfGroup(Group group);
+
         Subject Get(int id);
 
         bool Create(string name);

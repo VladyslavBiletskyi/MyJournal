@@ -1,0 +1,44 @@
+﻿@model MyJournal.WebApi.Models.Mark.SubjectFilteredTimeSpanModel
+
+@{
+    ViewData["Title"] = "Оціннки за проміжок часу";
+}
+
+<h1>Оцінки за проміжок часу</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="FilteredMarksForTimeSpan">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label class="control-label">З якого числа</label>
+                <input asp-for="DateFrom" class="form-control" />
+                <span asp-validation-for="DateFrom" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">По яке число</label>
+                <input asp-for="DateTo" class="form-control" />
+                <span asp-validation-for="DateTo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">З предмету</label>
+                <select asp-for="SubjectId" class="form-control">
+                    @foreach (var subject in Model.SubjectsForSelection)
+                    {
+                        <option value="@subject.SubjectId">@subject.Name</option>
+                    }
+                </select>
+                <span asp-validation-for="DateTo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Показати" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Назад</a>
+</div>
+

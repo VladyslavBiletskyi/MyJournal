@@ -9,6 +9,7 @@ using MyJournal.Services.Extensibility.Services;
 using MyJournal.WebApi.Extensibility.Formatters;
 using MyJournal.WebApi.Extensibility.Providers;
 using MyJournal.WebApi.Models.Mark;
+using MyJournal.WebApi.Models.Subject;
 
 namespace MyJournal.WebApi.Controllers
 {
@@ -18,17 +19,17 @@ namespace MyJournal.WebApi.Controllers
         private readonly IUserService userService;
         private readonly ILessonService lessonService;
         private readonly ICurrentUserProvider currentUserProvider;
-        private readonly IUserNameFormatter userNameFormatter;
         private readonly ISubjectNameFormatter subjectNameFormatter;
+        private readonly ISubjectService subjectService;
 
-        public MarkController(IMarkService markService, IUserService userService, ILessonService lessonService, ICurrentUserProvider currentUserProvider, IUserNameFormatter userNameFormatter, ISubjectNameFormatter subjectNameFormatter)
+        public MarkController(IMarkService markService, IUserService userService, ILessonService lessonService, ICurrentUserProvider currentUserProvider, ISubjectNameFormatter subjectNameFormatter, ISubjectService subjectService)
         {
             this.markService = markService;
             this.userService = userService;
             this.lessonService = lessonService;
             this.currentUserProvider = currentUserProvider;
-            this.userNameFormatter = userNameFormatter;
             this.subjectNameFormatter = subjectNameFormatter;
+            this.subjectService = subjectService;
         }
 
         [HttpGet]
@@ -61,6 +62,38 @@ namespace MyJournal.WebApi.Controllers
             }
 
             return GetMarksForTimeSpan(user, model.DateFrom, model.DateTo);
+        }
+
+        [HttpGet]
+        [Authorize]
+        public IActionResult FilteredMarksForTimeSpan()
+        {
+            var user = currentUserProvider.GetCurrentUser<Student>(User);
+            if (user == null)
+            {
+                return View();
+            }
+
+            var model = new SubjectFilteredTimeSpanModel
+            {
+                DateFrom = GetDateOfNearestMonday(),
+                DateTo = DateTime.Today,
+                SubjectsForSelection = subjectService.GetSubjectsOfGroup(user.Group).Select(x => new SubjectModel {SubjectId = x.Id, Name = subjectNameFormatter.Format(x)})
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult FilteredMarksForTimeSpan(SubjectFilteredTimeSpanModel model)
+        {
+            var user = currentUserProvider.GetCurrentUser<Student>(User);
+            if (user == null)
+            {
+                return View(model);
+            }
+
+            return GetMarksForTimeSpan(user, model.DateFrom, model.DateTo, model.SubjectId);
         }
 
         [HttpGet]
@@ -114,11 +147,11 @@ namespace MyJournal.WebApi.Controllers
             return RedirectToAction("Index", "Lesson");
         }
 
-        private IActionResult GetMarksForTimeSpan(Student user, DateTime dateFrom, DateTime dateTo)
+        private IActionResult GetMarksForTimeSpan(Student user, DateTime dateFrom, DateTime dateTo, int? subjectId = null)
         {
             var markGroups = markService.GetMarksWithSkips(user, dateFrom, dateTo.AddDays(1));
 
-            var convertedMarks = markGroups.ToDictionary(x => x.Key, x => x.Value.Select(value =>
+            var convertedMarks = markGroups.ToDictionary(x => x.Key, x => x.Value.Where(y => !subjectId.HasValue || y.Lesson.Subject.Id == subjectId.Value).Select(value =>
                 new DisplayMarkModel
                 {
                     LessonName = subjectNameFormatter.Format(value.Lesson.Subject),

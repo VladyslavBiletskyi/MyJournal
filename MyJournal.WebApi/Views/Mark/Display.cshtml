@@ -8,34 +8,37 @@
 <h1>Оцінки</h1>
 
 <div class="container">
-        @foreach (var value in Model)
-        {
-            <div class="row font-weight-bold">
-                <div class="col-1">
-                    <p class="text-center ">@DateTimeFormatter.FormatWithoutTime(value.Key)</p>
-                </div>
-                @foreach (var mark in value.Value)
-                {
-                    <div class="col-2">
-                        <p class="text-center">@mark.LessonName</p>
-                        @if (mark.NotPresent)
+    @foreach (var value in Model.Where(x => x.Value.Any()))
+    {
+        <div class="row font-weight-bold">
+            <div class="col-1">
+                <p class="text-center ">@DateTimeFormatter.FormatWithoutTime(value.Key)</p>
+            </div>
+            @foreach (var mark in value.Value)
+            {
+                <div class="col-2">
+                    <p class="text-center">@mark.LessonName</p>
+                    @if (mark.NotPresent)
+                    {
+                        <p class="text-center alert-danger">Відсутній</p>
+                    }
+                    else
+                    {
+                        if (mark.IsThematic)
                         {
-                            <p class="text-center alert-danger">Відсутній</p>
+                            <p class="text-center">[Тематична оцінка] @mark.Mark</p>
                         }
                         else
                         {
-                            if (mark.IsThematic)
-                            {
-                                <p class="text-center">[Тематична оцінка] @mark.Mark</p>
-                            }
-                            else
-                            {
-                                <p class="text-center">@mark.Mark</p>
-                            }
+                            <p class="text-center">@mark.Mark</p>
                         }
-                    </div>
-                }
-            </div>
-            <hr class="dropdown-divider"/>
-        }
+                    }
+                </div>
+            }
+        </div>
+        <hr class="dropdown-divider"/>
+    }
+</div>
+<div>
+    <a asp-action="Index">Назад</a>
 </div>
