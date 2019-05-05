@@ -11,5 +11,7 @@ namespace MyJournal.Domain.Entities
         public Teacher Teacher { get; set; }
 
         public DateTime DateTime { get; set; }
+
+        public bool IsForThematicMarks { get; set; }
     }
 }

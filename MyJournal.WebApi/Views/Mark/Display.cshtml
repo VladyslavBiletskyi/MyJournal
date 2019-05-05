@@ -24,7 +24,14 @@
                         }
                         else
                         {
-                            <p class="text-center">@mark.Mark</p>
+                            if (mark.IsThematic)
+                            {
+                                <p class="text-center">[Тематична оцінка] @mark.Mark</p>
+                            }
+                            else
+                            {
+                                <p class="text-center">@mark.Mark</p>
+                            }
                         }
                     </div>
                 }

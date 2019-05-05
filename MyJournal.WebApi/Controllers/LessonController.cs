@@ -79,7 +79,8 @@ namespace MyJournal.WebApi.Controllers
                 LessonId = lessonId,
                 MarksData = markModels,
                 GroupName = groupNameFormatter.Format(lesson.Group),
-                SubjectName = subjectNameFormatter.Format(lesson.Subject)
+                SubjectName = subjectNameFormatter.Format(lesson.Subject),
+                IsForThematicMarks = lesson.IsForThematicMarks
             });
         }
 
@@ -125,7 +126,7 @@ namespace MyJournal.WebApi.Controllers
                 return View();
             }
 
-            var lesson = lessonService.Create(model.GroupId, model.SubjectId, model.TeacherId, model.DateTime);
+            var lesson = lessonService.Create(model.GroupId, model.SubjectId, model.TeacherId, model.DateTime, model.IsForThematicMarks);
             if (lesson.Data == null)
             {
                 foreach (var validationMessage in lesson.ValidationMessages)

@@ -3,5 +3,7 @@
     public class DisplayMarkModel : LessonMarkModelBase
     {
         public string LessonName { get; set; }
+
+        public bool IsThematic { get; set; }
     }
 }

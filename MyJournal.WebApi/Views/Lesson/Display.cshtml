@@ -1,7 +1,18 @@
 ﻿@using MyJournal.WebApi.Extensibility.Formatters
 @model MyJournal.WebApi.Models.Lesson.LessonModel
 @inject IDateTimeFormatter DateTimeFormatter
-<h1>Урок @DateTimeFormatter.FormatWithoutTime(Model.DateTime)</h1><p/>
+@{
+    var lessonTitle = "";
+    if (Model.IsForThematicMarks)
+    {
+        lessonTitle = "Урок для тематичної оцінки";
+    }
+    else
+    {
+        lessonTitle = "Урок";
+    }
+}
+<h1>@lessonTitle @DateTimeFormatter.FormatWithoutTime(Model.DateTime)</h1><p/>
 <h2>@Model.SubjectName - @Model.GroupName</h2>
 <div>
     <hr />

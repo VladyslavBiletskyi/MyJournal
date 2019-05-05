@@ -13,5 +13,7 @@ namespace MyJournal.Domain.Entities
         public Lesson Lesson { get; set; }
 
         public DateTime UpdateTime { get; set; }
+
+        public bool IsThematic { get; set; }
     }
 }

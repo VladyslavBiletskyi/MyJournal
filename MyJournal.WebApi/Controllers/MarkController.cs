@@ -105,7 +105,8 @@ namespace MyJournal.WebApi.Controllers
                     Grade = x.Mark,
                     Lesson = lesson,
                     Student = student,
-                    UpdateTime = DateTime.Now
+                    UpdateTime = DateTime.Now,
+                    IsThematic = lesson.IsForThematicMarks
                 };
             }).ToList();
 
@@ -122,7 +123,8 @@ namespace MyJournal.WebApi.Controllers
                 {
                     LessonName = subjectNameFormatter.Format(value.Lesson.Subject),
                     Mark = value.Grade,
-                    NotPresent = value.LessonSkip != null
+                    NotPresent = value.LessonSkip != null,
+                    IsThematic = value.IsThematic
                 }));
             return View("Display", convertedMarks);
         }

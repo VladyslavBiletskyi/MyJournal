@@ -11,6 +11,8 @@
     <Compile Remove="Migrations\20190429104049_AttendsReworkedToLessonSkips.Designer.cs" />
     <Compile Remove="Migrations\20190429135226_TeacherForSubjectAssigningFixed.cs" />
     <Compile Remove="Migrations\20190429135226_TeacherForSubjectAssigningFixed.Designer.cs" />
+    <Compile Remove="Migrations\20190505153939_ThematicMarksCreated.cs" />
+    <Compile Remove="Migrations\20190505153939_ThematicMarksCreated.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

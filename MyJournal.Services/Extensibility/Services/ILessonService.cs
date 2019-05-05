@@ -7,7 +7,7 @@ namespace MyJournal.Services.Extensibility.Services
 {
     public interface ILessonService
     {
-        ValidationResult<Lesson> Create(int groupId, int subjectId, int teacherId, DateTime dateTime);
+        ValidationResult<Lesson> Create(int groupId, int subjectId, int teacherId, DateTime dateTime, bool isForThematicMarks);
 
         IDictionary<DateTime, IEnumerable<Lesson>> GetLessonsOfGroupBetweenDates(Group group, DateTime fromDate, DateTime toDate);
 

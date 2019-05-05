@@ -11,5 +11,7 @@ namespace MyJournal.WebApi.Models.Lesson
         public int TeacherId { get; set; }
 
         public DateTime DateTime { get; set; }
+
+        public bool IsForThematicMarks { get; set; }
     }
 }

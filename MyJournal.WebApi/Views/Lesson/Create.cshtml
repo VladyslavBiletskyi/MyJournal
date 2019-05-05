@@ -29,6 +29,11 @@
                 <span asp-validation-for="DateTime" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label class="control-label">Для тематичної оцінки</label>
+                <input asp-for="IsForThematicMarks" class="form-control" />
+                <span asp-validation-for="IsForThematicMarks" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Створити" class="btn btn-primary" />
             </div>
         </form>
