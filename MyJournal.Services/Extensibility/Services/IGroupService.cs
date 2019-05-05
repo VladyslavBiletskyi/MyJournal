@@ -8,5 +8,7 @@ namespace MyJournal.Services.Extensibility.Services
         IEnumerable<Group> Get();
 
         Group Get(int id);
+
+        bool Create(Group group);
     }
 }

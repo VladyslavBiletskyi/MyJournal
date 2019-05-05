@@ -29,5 +29,10 @@ namespace MyJournal.Services.Services
             initialGroupSeeder.Seed();
             return groupRepository.Find(id);
         }
+
+        public bool Create(Group group)
+        {
+            return groupRepository.CreateInstance(group);
+        }
     }
 }

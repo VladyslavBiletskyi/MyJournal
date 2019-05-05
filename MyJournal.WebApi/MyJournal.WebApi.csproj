@@ -51,9 +51,4 @@
     <ProjectReference Include="..\MyJournal.Services\MyJournal.Services.csproj" />
   </ItemGroup>
 
-
-  <ItemGroup>
-    <Folder Include="Views\Group\" />
-  </ItemGroup>
-
 </Project>
