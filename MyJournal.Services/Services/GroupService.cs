@@ -21,7 +21,7 @@ namespace MyJournal.Services.Services
         public IEnumerable<Group> Get()
         {
             initialGroupSeeder.Seed();
-            return groupRepository.Instances().ToList();
+            return groupRepository.Instances().OrderBy(x => x.Year).ToList();
         }
 
         public Group Get(int id)

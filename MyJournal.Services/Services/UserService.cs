@@ -21,12 +21,12 @@ namespace MyJournal.Services.Services
 
         public IEnumerable<ApplicationUser> GetTeachers()
         {
-            return teacherRepository.Instances().ToList();
+            return teacherRepository.Instances().OrderBy(x => x.Surname).ToList();
         }
 
         public IEnumerable<ApplicationUser> GetStudents()
         {
-            return studentRepository.Instances().ToList();
+            return studentRepository.Instances().OrderBy(x => x.Surname).ToList();
         }
 
         public IEnumerable<ApplicationUser> GetUsers()

@@ -17,7 +17,7 @@ namespace MyJournal.Services.Services
 
         public IEnumerable<Subject> GetAll()
         {
-            return subjectRepository.Instances().ToList();
+            return subjectRepository.Instances().OrderBy(x => x.Name).ToList();
         }
 
         public Subject Get(int id)
