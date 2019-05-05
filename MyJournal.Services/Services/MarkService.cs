@@ -58,7 +58,7 @@ namespace MyJournal.Services.Services
 
         private IDictionary<DateTime, IEnumerable<Mark>> OrderAndGroupMarks(IEnumerable<Mark> marks)
         {
-            return marks.GroupBy(x => x.Lesson.DateTime.Date, x => x).OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Select(value => value));
+            return marks.GroupBy(x => x.Lesson.DateTime.Date, x => x).OrderByDescending(x => x.Key).ToDictionary(x => x.Key, x => x.Select(value => value));
         }
 
         private Mark LessonSkipToMark(LessonSkip skip)
