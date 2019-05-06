@@ -65,9 +65,12 @@ namespace MyJournal.Services.Services
 
         public string Export(Subject subject, Group group)
         {
+            var semesterStartDate = GetSemesterStart();
+
             var marksForSemester = markRepository.Instances()
                 .Where(x => x.Lesson.Group == group && x.Lesson.Subject == subject)
                 .Concat(lessonSkipRepository.Instances().Where(x => x.Lesson.Group == group && x.Lesson.Subject == subject).Select(LessonSkipToMark))
+                .Where(x => x.Lesson.DateTime >= semesterStartDate && x.Lesson.DateTime < DateTime.Today.AddDays(1))
                 .GroupBy(x => x.Lesson)
                 .OrderBy(x => x.Key.DateTime).ToList();
 
@@ -134,15 +137,15 @@ namespace MyJournal.Services.Services
             };
         }
 
-        private TimeSpan GetTimeFromSemesterStart()
+        private DateTime GetSemesterStart()
         {
             if (DateTime.Today.Month >= 9)
             {
-                return DateTime.Now - new DateTime(DateTime.Today.Year, 9, 1);
+                return new DateTime(DateTime.Today.Year, 9, 1);
             }
             else
             {
-                return DateTime.Now - new DateTime(DateTime.Today.Year, 1, 1);
+                return new DateTime(DateTime.Today.Year, 1, 1);
             }
         }
     }
