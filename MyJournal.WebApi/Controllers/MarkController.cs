@@ -5,9 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Query.Internal;
 using MyJournal.Domain.Entities;
 using MyJournal.Services.Extensibility.Services;
 using MyJournal.WebApi.Extensibility.Formatters;
@@ -110,8 +108,6 @@ namespace MyJournal.WebApi.Controllers
                 return RedirectToAction("Index");
             }
 
-            
-
             return GetMarksForTimeSpan(user, GetDateOfNearestMonday(), DateTime.Today);
         }
 
@@ -171,7 +167,7 @@ namespace MyJournal.WebApi.Controllers
             var teacher = currentUserProvider.GetCurrentUser<Teacher>(User);
             if (teacher?.Group == null)
             {
-                return RedirectToAction("Index", "Lesson");
+                return View("ExportEmpty");
             }
 
             var subject = subjectService.Get(subjectId);
