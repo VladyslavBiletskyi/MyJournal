@@ -66,7 +66,9 @@ namespace MyJournal.Services.Services
         public string Export(Subject subject, Group group)
         {
             var marksForSemester = markRepository.Instances()
-                .Where(x => x.Lesson.Group == group && x.Lesson.Subject == subject).GroupBy(x => x.Lesson)
+                .Where(x => x.Lesson.Group == group && x.Lesson.Subject == subject)
+                .Concat(lessonSkipRepository.Instances().Where(x => x.Lesson.Group == group && x.Lesson.Subject == subject).Select(LessonSkipToMark))
+                .GroupBy(x => x.Lesson)
                 .OrderBy(x => x.Key.DateTime).ToList();
 
             var lessonDatesForSemester = lessonRepository.Instances().Where(x => x.Subject == subject && x.Group == group).Select(x => x.DateTime).ToList();
