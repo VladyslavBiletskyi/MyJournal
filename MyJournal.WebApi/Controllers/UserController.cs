@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using MyJournal.Services.Extensibility.Formatters;
 using MyJournal.Services.Extensibility.Services;
-using MyJournal.WebApi.Extensibility.Formatters;
 using MyJournal.WebApi.Models.User;
 
 namespace MyJournal.WebApi.Controllers

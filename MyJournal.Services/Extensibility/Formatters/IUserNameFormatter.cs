@@ -1,6 +1,6 @@
 ﻿using MyJournal.Domain.Entities;
 
-namespace MyJournal.WebApi.Extensibility.Formatters
+namespace MyJournal.Services.Extensibility.Formatters
 {
     public interface IUserNameFormatter
     {

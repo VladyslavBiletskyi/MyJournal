@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using MyJournal.Domain.Entities;
-using MyJournal.WebApi.Extensibility.Formatters;
+using MyJournal.Services.Extensibility.Formatters;
 
-namespace MyJournal.WebApi.Formatters
+namespace MyJournal.Services.Formatters
 {
     public class UserNameFormatter : IUserNameFormatter
     {

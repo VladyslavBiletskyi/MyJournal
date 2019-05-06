@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MyJournal.WebApi.Extensibility.Formatters
+namespace MyJournal.Services.Extensibility.Formatters
 {
     public interface IDateTimeFormatter
     {

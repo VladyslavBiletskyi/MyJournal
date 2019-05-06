@@ -1,7 +1,7 @@
 ﻿using System;
-using MyJournal.WebApi.Extensibility.Formatters;
+using MyJournal.Services.Extensibility.Formatters;
 
-namespace MyJournal.WebApi.Formatters
+namespace MyJournal.Services.Formatters
 {
     public class DateTimeFormatter : IDateTimeFormatter
     {

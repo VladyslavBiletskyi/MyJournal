@@ -4,8 +4,8 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyJournal.Domain.Entities;
+using MyJournal.Services.Extensibility.Formatters;
 using MyJournal.Services.Extensibility.Services;
-using MyJournal.WebApi.Extensibility.Formatters;
 using MyJournal.WebApi.Extensibility.Providers;
 using MyJournal.WebApi.Models.Message;
 
