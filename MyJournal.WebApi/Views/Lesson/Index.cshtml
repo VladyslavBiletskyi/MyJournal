@@ -13,9 +13,12 @@
             </div>
             @if (User.Claims.FirstOrDefault(x => x.Type == Constants.RoleClaimName)?.Value == Constants.TeacherRoleName)
             {
-                <div class="col-lg-4">
-                    <a asp-controller="Lesson" asp-action="GroupLessons" class="btn btn-dark btn-lg">Заняття класу</a>
-                </div>
+            <div class="col-lg-4">
+                <a asp-controller="Lesson" asp-action="GroupLessons" class="btn btn-dark btn-lg">Заняття класу</a>
+            </div>
+            <div class="col-lg-4">
+                <a asp-controller="Mark" asp-action="Export" class="btn btn-dark btn-lg">Експорт оцінок</a>
+            </div>
             }
         </div>
     </div>

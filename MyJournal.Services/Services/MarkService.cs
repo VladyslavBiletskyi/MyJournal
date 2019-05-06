@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using MyJournal.Domain.Entities;
 using MyJournal.Domain.Extensibility.Repositories;
 using MyJournal.Services.Extensibility.Formatters;
@@ -14,12 +15,16 @@ namespace MyJournal.Services.Services
         private IMarkRepository markRepository;
         private ILessonSkipRepository lessonSkipRepository;
         private IDateTimeFormatter dateTimeFormatter;
+        private IUserNameFormatter userNameFormatter;
+        private ILessonRepository lessonRepository;
 
-        public MarkService(IMarkRepository markRepository, ILessonSkipRepository lessonSkipRepository, IDateTimeFormatter dateTimeFormatter)
+        public MarkService(IMarkRepository markRepository, ILessonSkipRepository lessonSkipRepository, IDateTimeFormatter dateTimeFormatter, ILessonRepository lessonRepository, IUserNameFormatter userNameFormatter)
         {
             this.markRepository = markRepository;
             this.lessonSkipRepository = lessonSkipRepository;
             this.dateTimeFormatter = dateTimeFormatter;
+            this.lessonRepository = lessonRepository;
+            this.userNameFormatter = userNameFormatter;
         }
 
         public IEnumerable<Mark> GetMarksOfLesson(Lesson lesson)
@@ -58,15 +63,58 @@ namespace MyJournal.Services.Services
             return new ValidationResult(validationResults.ToArray());
         }
 
-        public void Export(Subject subject, Group group)
+        public string Export(Subject subject, Group group)
         {
             var marksForSemester = markRepository.Instances()
                 .Where(x => x.Lesson.Group == group && x.Lesson.Subject == subject).GroupBy(x => x.Lesson)
-                .OrderBy(x => x.Key.DateTime);
-            var columnNames = new[] { "П.І.Б. учня" }.Concat(marksForSemester.Select(x => dateTimeFormatter.FormatWithoutTime(x.Key.DateTime)));
-            var rows = new List<string>();
+                .OrderBy(x => x.Key.DateTime).ToList();
 
-            
+            var lessonDatesForSemester = lessonRepository.Instances().Where(x => x.Subject == subject && x.Group == group).Select(x => x.DateTime).ToList();
+
+            var studentsMarksByStudents = new Dictionary<Student, List<Tuple<DateTime, string>>>();
+            foreach (var student in group.Students)
+            {
+                studentsMarksByStudents[student] = new List<Tuple<DateTime, string>>();
+            }
+            foreach (var markGroup in marksForSemester)
+            {
+                foreach (var mark in markGroup)
+                {
+                    if (studentsMarksByStudents.ContainsKey(mark.Student))
+                    {
+                        studentsMarksByStudents[mark.Student].Add(new Tuple<DateTime, string>(mark.Lesson.DateTime.Date, mark.LessonSkip == null?
+                            mark.IsThematic ? $"[Тематична] {mark.Grade.ToString()}": mark.Grade.ToString()
+                            : "Н"));
+                    }
+                }
+            }
+
+            var extendedStudentsMarksByStudents = new Dictionary<Student, List<Tuple<DateTime, string>>>();
+
+            foreach (var marksOfStudent in studentsMarksByStudents)
+            {
+                var emptyLessonDates = lessonDatesForSemester.Where(lessonDate => marksOfStudent.Value.All(value => value.Item1 != lessonDate.Date));
+                extendedStudentsMarksByStudents[marksOfStudent.Key] = studentsMarksByStudents[marksOfStudent.Key]
+                    .Concat(emptyLessonDates.Select(x => new Tuple<DateTime, string>(x, String.Empty)))
+                    .OrderBy(x => x.Item1).ToList();
+            }
+
+            var stringBuilder = new StringBuilder();
+            stringBuilder.Append("П.І.Б. учня;");
+            if (extendedStudentsMarksByStudents.Any())
+            {
+                var exportDelimiter = ";";
+                stringBuilder.Append(String.Join(exportDelimiter, extendedStudentsMarksByStudents.FirstOrDefault().Value.Select(x => dateTimeFormatter.FormatWithoutTime(x.Item1))));
+                
+                foreach (var extendedMarksOfStudent in extendedStudentsMarksByStudents)
+                {
+                    stringBuilder.AppendLine();
+                    stringBuilder.Append(userNameFormatter.FormatFull(extendedMarksOfStudent.Key) + exportDelimiter);
+                    stringBuilder.Append(String.Join(exportDelimiter, extendedMarksOfStudent.Value.Select(x => x.Item2)));
+                }
+            }
+
+            return stringBuilder.ToString();
         }
 
         private IDictionary<DateTime, IEnumerable<Mark>> OrderAndGroupMarks(IEnumerable<Mark> marks)

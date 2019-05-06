@@ -14,5 +14,7 @@ namespace MyJournal.Services.Extensibility.Services
         IDictionary<DateTime, IEnumerable<Mark>> GetMarksWithSkips(Student student, DateTime fromDay, DateTime toDay);
 
         IDictionary<DateTime, IEnumerable<Mark>> GetMarks(Student student, DateTime fromDay, DateTime toDay);
+
+        string Export(Subject subject, Group group);
     }
 }

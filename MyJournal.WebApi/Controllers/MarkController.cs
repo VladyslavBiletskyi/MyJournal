@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Query.Internal;
 using MyJournal.Domain.Entities;
@@ -145,6 +149,40 @@ namespace MyJournal.WebApi.Controllers
 
             markService.InsertBatch(marksForSaving);
             return RedirectToAction("Index", "Lesson");
+        }
+
+        [HttpGet]
+        [Authorize(Policy = Constants.TeacherPolicyName)]
+        public IActionResult Export()
+        {
+            var teacher = currentUserProvider.GetCurrentUser<Teacher>(User);
+            if (teacher?.Group == null)
+            {
+                return RedirectToAction("Index");
+            }
+            var subjectsOfGroup = subjectService.GetSubjectsOfGroup(teacher.Group).Select(x => new SubjectModel { SubjectId = x.Id, Name = subjectNameFormatter.Format(x) });
+            return View(subjectsOfGroup);
+        }
+
+        [HttpPost]
+        [Authorize(Policy = Constants.TeacherPolicyName)]
+        public async Task<IActionResult> Export(int subjectId)
+        {
+            var teacher = currentUserProvider.GetCurrentUser<Teacher>(User);
+            if (teacher?.Group == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            var subject = subjectService.Get(subjectId);
+
+            var exportResult = markService.Export(subject, teacher.Group);
+            var exportBytes = Encoding.GetEncoding("windows-1251").GetBytes(exportResult);
+
+            var stream = new MemoryStream();
+            await stream.WriteAsync(exportBytes, 0, exportBytes.Length);
+            stream.Position = 0;
+            return File(stream, "text/csv", subjectNameFormatter.Format(subject) + ".csv");
         }
 
         private IActionResult GetMarksForTimeSpan(Student user, DateTime dateFrom, DateTime dateTo, int? subjectId = null)
