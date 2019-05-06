@@ -64,7 +64,7 @@ namespace MyJournal.WebApi.Controllers
 
             var marksByStudentId = shouldLoadValues? markService.GetMarksOfLesson(lesson).ToDictionary(x => x.Student.Id, x => x) : new Dictionary<int, Mark>();
 
-            var markModels = lesson.Group.Students?.Select(x => new LessonMarkModel
+            var markModels = lesson.Group.Students?.OrderBy(x => x.Surname).ThenBy(x => x.FirstName).Select(x => new LessonMarkModel
             {
                 LessonId = lessonId,
                 Mark = shouldLoadValues && marksByStudentId.ContainsKey(x.Id) ? marksByStudentId[x.Id].Grade : null,
