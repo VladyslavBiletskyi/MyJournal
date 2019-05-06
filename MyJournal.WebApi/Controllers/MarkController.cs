@@ -171,7 +171,7 @@ namespace MyJournal.WebApi.Controllers
             var teacher = currentUserProvider.GetCurrentUser<Teacher>(User);
             if (teacher?.Group == null)
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Lesson");
             }
 
             var subject = subjectService.Get(subjectId);
