@@ -2,10 +2,10 @@
 @model Dictionary<DateTime, IEnumerable<MyJournal.WebApi.Models.Lesson.LessonListItemModel>>
 @inject IDateTimeFormatter DateTimeFormatter
 @{
-    ViewData["Title"] = "Заняття класу";
+    ViewData["Title"] = "Уроки класу";
 }
 
-<h1>Заняття класу за місяць</h1>
+<h1>Уроки класу за місяць</h1>
 <div class="container">
     @foreach (var value in Model)
     {
@@ -17,7 +17,19 @@
             {
                 <div class="col-2">
                     @{
-                        var lessonTitle = lesson.IsForThematicMarks ? $"[Тематичне оцінювання] {lesson.SubjectName}" : lesson.SubjectName;
+                        var lessonTitlePrefix = "";
+                        if (lesson.IsForThematicMarks)
+                        {
+                            lessonTitlePrefix = "[Тематичне оцінювання] ";
+                        }
+                        else
+                        {
+                            if (lesson.IsForSemesterMarks)
+                            {
+                                lessonTitlePrefix = "[Семестрове оцінювання] ";
+                            }
+                        }
+                        var lessonTitle = $"{lessonTitlePrefix}{lesson.SubjectName}";
                     }
                     <a class="btn btn-light" asp-action="Display" asp-route-lessonId="@lesson.LessonId">@lessonTitle</a>
                 </div>

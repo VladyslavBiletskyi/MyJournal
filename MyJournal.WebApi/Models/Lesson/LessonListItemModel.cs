@@ -7,5 +7,7 @@
         public string SubjectName { get; set; }
 
         public bool IsForThematicMarks { get; set; }
+
+        public bool IsForSemesterMarks { get; set; }
     }
 }

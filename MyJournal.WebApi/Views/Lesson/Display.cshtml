@@ -9,7 +9,14 @@
     }
     else
     {
-        lessonTitle = "Урок";
+        if (Model.IsForSemesterMarks)
+        {
+            lessonTitle = "Семестрове оцінювання";
+        }
+        else
+        {
+            lessonTitle = "Урок";
+        }
     }
 }
 <h1>@lessonTitle @DateTimeFormatter.FormatWithoutTime(Model.DateTime)</h1><p/>

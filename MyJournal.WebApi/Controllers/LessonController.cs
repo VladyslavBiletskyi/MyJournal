@@ -80,7 +80,8 @@ namespace MyJournal.WebApi.Controllers
                 MarksData = markModels,
                 GroupName = groupNameFormatter.Format(lesson.Group),
                 SubjectName = subjectNameFormatter.Format(lesson.Subject),
-                IsForThematicMarks = lesson.IsForThematicMarks
+                IsForThematicMarks = lesson.IsForThematicMarks,
+                IsForSemesterMarks = lesson.IsForSemesterMarks
             });
         }
 
@@ -126,7 +127,13 @@ namespace MyJournal.WebApi.Controllers
                 return View();
             }
 
-            var lesson = lessonService.Create(model.GroupId, model.SubjectId, model.TeacherId, model.DateTime, model.IsForThematicMarks);
+            if (model.IsForSemesterMarks && model.IsForThematicMarks)
+            {
+                ModelState.AddModelError(nameof(model.IsForSemesterMarks), "Урок не може одночасно бути для семестрових та тематичних оцінок, будь ласка, створіть окремі уроки.");
+                return View();
+            }
+
+            var lesson = lessonService.Create(model.GroupId, model.SubjectId, model.TeacherId, model.DateTime, model.IsForThematicMarks, model.IsForSemesterMarks);
             if (lesson.Data == null)
             {
                 foreach (var validationMessage in lesson.ValidationMessages)
@@ -156,7 +163,8 @@ namespace MyJournal.WebApi.Controllers
             {
                 LessonId = value.Id,
                 SubjectName = value.Subject.Name,
-                IsForThematicMarks = value.IsForThematicMarks
+                IsForThematicMarks = value.IsForThematicMarks,
+                IsForSemesterMarks = value.IsForSemesterMarks
             }));
 
             return View(converted);

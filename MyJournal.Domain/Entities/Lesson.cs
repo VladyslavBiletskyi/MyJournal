@@ -13,5 +13,7 @@ namespace MyJournal.Domain.Entities
         public DateTime DateTime { get; set; }
 
         public bool IsForThematicMarks { get; set; }
+
+        public bool IsForSemesterMarks { get; set; }
     }
 }

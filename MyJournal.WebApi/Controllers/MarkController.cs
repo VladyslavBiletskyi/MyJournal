@@ -115,36 +115,7 @@ namespace MyJournal.WebApi.Controllers
         [Authorize(Policy = Constants.TeacherPolicyName)]
         public IActionResult InsertBatch([FromForm]IEnumerable<LessonMarkModel> model)
         {
-            if (!model.Any() || !IsBatchValid(model))
-            {
-                return RedirectToAction("Index", "Lesson");
-            }
-
-            FixWrongPresenceData(model);
-            var lesson = lessonService.Get(model.First().LessonId);
-
-            var marksForSaving = model.Select(x =>
-            {
-                var student = userService.FindStudent(x.StudentId);
-                return new Mark
-                {
-                    LessonSkip = x.NotPresent
-                        ? new LessonSkip()
-                        {
-                            Student = student,
-                            Lesson = lesson
-                        }
-                        : null,
-                    Grade = x.Mark,
-                    Lesson = lesson,
-                    Student = student,
-                    UpdateTime = DateTime.Now,
-                    IsThematic = lesson.IsForThematicMarks
-                };
-            }).ToList();
-
-            markService.InsertBatch(marksForSaving);
-            return RedirectToAction("Index", "Lesson");
+            return InsertInternal(model, marks => markService.InsertBatch(marks));
         }
 
         [HttpGet]
@@ -181,6 +152,41 @@ namespace MyJournal.WebApi.Controllers
             return File(stream, "text/csv", subjectNameFormatter.Format(subject) + ".csv");
         }
 
+        private IActionResult InsertInternal([FromForm]IEnumerable<LessonMarkModel> model, Action<IEnumerable<Mark>> action)
+        {
+            if (!model.Any() || !IsBatchValid(model))
+            {
+                return RedirectToAction("Index", "Lesson");
+            }
+
+            FixWrongPresenceData(model);
+            var lesson = lessonService.Get(model.First().LessonId);
+
+            var marksForSaving = model.Select(x =>
+            {
+                var student = userService.FindStudent(x.StudentId);
+                return new Mark
+                {
+                    LessonSkip = x.NotPresent
+                        ? new LessonSkip()
+                        {
+                            Student = student,
+                            Lesson = lesson
+                        }
+                        : null,
+                    Grade = x.Mark,
+                    Lesson = lesson,
+                    Student = student,
+                    UpdateTime = DateTime.Now,
+                    IsThematic = lesson.IsForThematicMarks,
+                    IsSemester = lesson.IsForSemesterMarks
+                };
+            }).ToList();
+
+            action(marksForSaving);
+            return RedirectToAction("Index", "Lesson");
+        }
+
         private IActionResult GetMarksForTimeSpan(Student user, DateTime dateFrom, DateTime dateTo, int? subjectId = null)
         {
             var markGroups = markService.GetMarksWithSkips(user, dateFrom, dateTo.AddDays(1));
@@ -191,7 +197,8 @@ namespace MyJournal.WebApi.Controllers
                     LessonName = subjectNameFormatter.Format(value.Lesson.Subject),
                     Mark = value.Grade,
                     NotPresent = value.LessonSkip != null,
-                    IsThematic = value.IsThematic
+                    IsThematic = value.IsThematic,
+                    IsSemester = value.IsSemester
                 }));
             return View("Display", convertedMarks);
         }

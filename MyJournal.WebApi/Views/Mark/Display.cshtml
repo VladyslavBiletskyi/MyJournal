@@ -16,7 +16,7 @@
             </div>
             @foreach (var mark in value.Value)
             {
-                <div class="col-2">
+                <div class="col-3">
                     <p class="text-center">@mark.LessonName</p>
                     @if (mark.NotPresent)
                     {
@@ -30,6 +30,10 @@
                         }
                         else
                         {
+                            if (mark.IsSemester)
+                            {
+                                <p class="text-center">[Семестрова оцінка] @mark.Mark</p>
+                            }
                             <p class="text-center">@mark.Mark</p>
                         }
                     }

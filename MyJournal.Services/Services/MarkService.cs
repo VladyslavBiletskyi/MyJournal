@@ -74,12 +74,12 @@ namespace MyJournal.Services.Services
                 .GroupBy(x => x.Lesson)
                 .OrderBy(x => x.Key.DateTime).ToList();
 
-            var lessonDatesForSemester = lessonRepository.Instances().Where(x => x.Subject == subject && x.Group == group).Select(x => x.DateTime).ToList();
+            var lessonsForSemester = lessonRepository.Instances().Where(x => x.Subject == subject && x.Group == group).ToList();
 
-            var studentsMarksByStudents = new Dictionary<Student, List<Tuple<DateTime, string>>>();
+            var studentsMarksByStudents = new Dictionary<Student, List<Tuple<Lesson, string>>>();
             foreach (var student in group.Students)
             {
-                studentsMarksByStudents[student] = new List<Tuple<DateTime, string>>();
+                studentsMarksByStudents[student] = new List<Tuple<Lesson, string>>();
             }
             foreach (var markGroup in marksForSemester)
             {
@@ -87,21 +87,21 @@ namespace MyJournal.Services.Services
                 {
                     if (studentsMarksByStudents.ContainsKey(mark.Student))
                     {
-                        studentsMarksByStudents[mark.Student].Add(new Tuple<DateTime, string>(mark.Lesson.DateTime.Date, mark.LessonSkip == null?
-                            mark.IsThematic ? $"[Тематична] {mark.Grade.ToString()}": mark.Grade.ToString()
+                        studentsMarksByStudents[mark.Student].Add(new Tuple<Lesson, string>(mark.Lesson, mark.LessonSkip == null?
+                            $"{GetMarkPrefix(mark)}{mark.Grade.ToString()}"
                             : "Н"));
                     }
                 }
             }
 
-            var extendedStudentsMarksByStudents = new Dictionary<Student, List<Tuple<DateTime, string>>>();
+            var extendedStudentsMarksByStudents = new Dictionary<Student, List<Tuple<Lesson, string>>>();
 
             foreach (var marksOfStudent in studentsMarksByStudents)
             {
-                var emptyLessonDates = lessonDatesForSemester.Where(lessonDate => marksOfStudent.Value.All(value => value.Item1 != lessonDate.Date));
+                var emptyLessons = lessonsForSemester.Where(lesson => marksOfStudent.Value.All(value => value.Item1 != lesson));
                 extendedStudentsMarksByStudents[marksOfStudent.Key] = studentsMarksByStudents[marksOfStudent.Key]
-                    .Concat(emptyLessonDates.Select(x => new Tuple<DateTime, string>(x, String.Empty)))
-                    .OrderBy(x => x.Item1).ToList();
+                    .Concat(emptyLessons.Select(x => new Tuple<Lesson, string>(x, String.Empty)))
+                    .OrderBy(x => x.Item1.DateTime).ToList();
             }
 
             var stringBuilder = new StringBuilder();
@@ -109,7 +109,7 @@ namespace MyJournal.Services.Services
             if (extendedStudentsMarksByStudents.Any())
             {
                 var exportDelimiter = ";";
-                stringBuilder.Append(String.Join(exportDelimiter, extendedStudentsMarksByStudents.FirstOrDefault().Value.Select(x => dateTimeFormatter.FormatWithoutTime(x.Item1))));
+                stringBuilder.Append(String.Join(exportDelimiter, extendedStudentsMarksByStudents.FirstOrDefault().Value.Select(x => dateTimeFormatter.FormatWithoutTime(x.Item1.DateTime))));
                 
                 foreach (var extendedMarksOfStudent in extendedStudentsMarksByStudents)
                 {
@@ -120,6 +120,23 @@ namespace MyJournal.Services.Services
             }
 
             return stringBuilder.ToString();
+        }
+
+        private string GetMarkPrefix(Mark mark)
+        {
+            var prefix = "";
+            if (mark.IsThematic)
+            {
+                prefix = "[Тематична] ";
+            }
+            else
+            {
+                if (mark.IsSemester)
+                {
+                    prefix = "[Семестрова] ";
+                }
+            }
+            return prefix;
         }
 
         private IDictionary<DateTime, IEnumerable<Mark>> OrderAndGroupMarks(IEnumerable<Mark> marks)

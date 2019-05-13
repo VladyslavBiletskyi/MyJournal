@@ -17,5 +17,7 @@ namespace MyJournal.WebApi.Models.Lesson
         public IEnumerable<LessonMarkModel> MarksData { get; set; }
 
         public bool IsForThematicMarks { get; set; }
+
+        public bool IsForSemesterMarks { get; set; }
     }
 }

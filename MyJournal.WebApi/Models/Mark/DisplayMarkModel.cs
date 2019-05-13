@@ -5,5 +5,7 @@
         public string LessonName { get; set; }
 
         public bool IsThematic { get; set; }
+
+        public bool IsSemester { get; set; }
     }
 }

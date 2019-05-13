@@ -15,5 +15,7 @@ namespace MyJournal.Domain.Entities
         public DateTime UpdateTime { get; set; }
 
         public bool IsThematic { get; set; }
+
+        public bool IsSemester { get; set; }
     }
 }
