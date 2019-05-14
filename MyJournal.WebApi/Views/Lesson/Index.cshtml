@@ -1,20 +1,20 @@
 ﻿
 @{
-    ViewData["Title"] = "Заняття";
+    ViewData["Title"] = "Уроки";
 }
 
-<h1>Керування заняттями</h1>
+<h1>Керування уроками</h1>
 
 <div class="jumbotron">
     <div class="container">
         <div class="row">
             <div class="col-lg-4">
-                <a asp-controller="Lesson" asp-action="Create" class="btn btn-dark btn-lg">Додати заняття</a>
+                <a asp-controller="Lesson" asp-action="Create" class="btn btn-dark btn-lg">Додати урок</a>
             </div>
             @if (User.Claims.FirstOrDefault(x => x.Type == Constants.RoleClaimName)?.Value == Constants.TeacherRoleName)
             {
             <div class="col-lg-4">
-                <a asp-controller="Lesson" asp-action="GroupLessons" class="btn btn-dark btn-lg">Заняття класу</a>
+                <a asp-controller="Lesson" asp-action="GroupLessons" class="btn btn-dark btn-lg">Уроки класу</a>
             </div>
             <div class="col-lg-4">
                 <a asp-controller="Mark" asp-action="Export" class="btn btn-dark btn-lg">Експорт оцінок</a>

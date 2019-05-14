@@ -7,10 +7,11 @@
     <h1>Створити урок</h1>
 
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="All" class="text-danger"></div>
+
+<form asp-action="Create">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="row">
+        <div class="col-md-4">
             <div class="form-group">
                 <label class="control-label">Викладач</label>
                 @Html.PartialAsync("TeacherSelectionPartial").Result
@@ -28,6 +29,8 @@
                 <input asp-for="DateTime" class="form-control" />
                 <span asp-validation-for="DateTime" class="text-danger"></span>
             </div>
+        </div>
+        <div class="col-md-4">
             <div class="form-group">
                 <label class="control-label">Для тематичної оцінки</label>
                 <input asp-for="IsForThematicMarks" class="form-control" />
@@ -43,12 +46,17 @@
                 <input asp-for="IsForYearMarks" class="form-control" />
                 <span asp-validation-for="IsForYearMarks" class="text-danger"></span>
             </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
             <div class="form-group">
                 <input type="submit" value="Створити" class="btn btn-primary" />
             </div>
-        </form>
+        </div>
     </div>
-</div>
+</form>
+
 
 <div>
     <a asp-action="Index">Назад</a>
