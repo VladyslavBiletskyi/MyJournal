@@ -179,7 +179,8 @@ namespace MyJournal.WebApi.Controllers
                     Student = student,
                     UpdateTime = DateTime.Now,
                     IsThematic = lesson.IsForThematicMarks,
-                    IsSemester = lesson.IsForSemesterMarks
+                    IsSemester = lesson.IsForSemesterMarks,
+                    IsYear = lesson.IsForYearMarks
                 };
             }).ToList();
 
@@ -198,7 +199,8 @@ namespace MyJournal.WebApi.Controllers
                     Mark = value.Grade,
                     NotPresent = value.LessonSkip != null,
                     IsThematic = value.IsThematic,
-                    IsSemester = value.IsSemester
+                    IsSemester = value.IsSemester,
+                    IsYear = value.IsYear
                 }));
             return View("Display", convertedMarks);
         }

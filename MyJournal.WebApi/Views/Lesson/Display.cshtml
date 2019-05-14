@@ -15,7 +15,14 @@
         }
         else
         {
-            lessonTitle = "Урок";
+            if (Model.IsForYearMarks)
+            {
+                lessonTitle = "Річне оцінювання";
+            }
+            else
+            {
+                lessonTitle = "Урок";
+            }
         }
     }
 }

@@ -28,6 +28,13 @@
                             {
                                 lessonTitlePrefix = "[Семестрове оцінювання] ";
                             }
+                            else
+                            {
+                                if (lesson.IsForYearMarks)
+                                {
+                                    lessonTitlePrefix = "[Річне оцінювання] ";
+                                }
+                            }
                         }
                         var lessonTitle = $"{lessonTitlePrefix}{lesson.SubjectName}";
                     }

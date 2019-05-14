@@ -9,5 +9,7 @@
         public bool IsForThematicMarks { get; set; }
 
         public bool IsForSemesterMarks { get; set; }
+
+        public bool IsForYearMarks { get; set; }
     }
 }

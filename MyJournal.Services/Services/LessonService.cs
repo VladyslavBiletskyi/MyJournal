@@ -24,7 +24,7 @@ namespace MyJournal.Services.Services
             this.subjectRepository = subjectRepository;
         }
 
-        public ValidationResult<Lesson> Create(int groupId, int subjectId, int teacherId, DateTime dateTime, bool isForThematicMarks, bool isForSemesterMarks)
+        public ValidationResult<Lesson> Create(int groupId, int subjectId, int teacherId, DateTime dateTime, bool isForThematicMarks, bool isForSemesterMarks, bool isForYearMarks)
         {
             var validationResults = new List<string>();
             var group = groupRepository.Find(groupId);
@@ -56,7 +56,8 @@ namespace MyJournal.Services.Services
                     Subject = subject,
                     Teacher = teacher,
                     IsForThematicMarks = isForThematicMarks,
-                    IsForSemesterMarks = isForSemesterMarks
+                    IsForSemesterMarks = isForSemesterMarks,
+                    IsForYearMarks = isForYearMarks
                 };
                 if (!lessonRepository.CreateInstance(lesson))
                 {

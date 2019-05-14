@@ -81,7 +81,8 @@ namespace MyJournal.WebApi.Controllers
                 GroupName = groupNameFormatter.Format(lesson.Group),
                 SubjectName = subjectNameFormatter.Format(lesson.Subject),
                 IsForThematicMarks = lesson.IsForThematicMarks,
-                IsForSemesterMarks = lesson.IsForSemesterMarks
+                IsForSemesterMarks = lesson.IsForSemesterMarks,
+                IsForYearMarks = lesson.IsForYearMarks
             });
         }
 
@@ -127,13 +128,13 @@ namespace MyJournal.WebApi.Controllers
                 return View();
             }
 
-            if (model.IsForSemesterMarks && model.IsForThematicMarks)
+            if (!IsValidType(model))
             {
-                ModelState.AddModelError(nameof(model.IsForSemesterMarks), "Урок не може одночасно бути для семестрових та тематичних оцінок, будь ласка, створіть окремі уроки.");
+                ModelState.AddModelError(nameof(model.IsForSemesterMarks), "Урок не може одночасно бути для семестрових, річних та тематичних оцінок, будь ласка, створіть окремі уроки.");
                 return View();
             }
 
-            var lesson = lessonService.Create(model.GroupId, model.SubjectId, model.TeacherId, model.DateTime, model.IsForThematicMarks, model.IsForSemesterMarks);
+            var lesson = lessonService.Create(model.GroupId, model.SubjectId, model.TeacherId, model.DateTime, model.IsForThematicMarks, model.IsForSemesterMarks, model.IsForYearMarks);
             if (lesson.Data == null)
             {
                 foreach (var validationMessage in lesson.ValidationMessages)
@@ -164,10 +165,18 @@ namespace MyJournal.WebApi.Controllers
                 LessonId = value.Id,
                 SubjectName = value.Subject.Name,
                 IsForThematicMarks = value.IsForThematicMarks,
-                IsForSemesterMarks = value.IsForSemesterMarks
+                IsForSemesterMarks = value.IsForSemesterMarks,
+                IsForYearMarks = value.IsForYearMarks
             }));
 
             return View(converted);
+        }
+
+        private bool IsValidType(CreateLessonModel model)
+        {
+            
+            return (model.IsForSemesterMarks ^ model.IsForThematicMarks ^ model.IsForYearMarks) && !(model.IsForSemesterMarks && model.IsForThematicMarks && model.IsForYearMarks)
+                || (!model.IsForSemesterMarks && !model.IsForThematicMarks && !model.IsForYearMarks);
         }
 
         private bool IsTeacherAssociatedForSubject(Teacher teacher, int subjectId)

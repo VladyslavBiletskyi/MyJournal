@@ -135,6 +135,13 @@ namespace MyJournal.Services.Services
                 {
                     prefix = "[Семестрова] ";
                 }
+                else
+                {
+                    if (mark.IsYear)
+                    {
+                        prefix = "[Річна] ";
+                    }
+                }
             }
             return prefix;
         }

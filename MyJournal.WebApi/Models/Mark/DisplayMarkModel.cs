@@ -7,5 +7,7 @@
         public bool IsThematic { get; set; }
 
         public bool IsSemester { get; set; }
+
+        public bool IsYear { get; set; }
     }
 }

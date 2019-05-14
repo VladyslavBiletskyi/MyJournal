@@ -34,6 +34,13 @@
                             {
                                 <p class="text-center">[Семестрова оцінка] @mark.Mark</p>
                             }
+                            else
+                            {
+                                if (mark.IsYear)
+                                {
+                                    <p class="text-center">[Річна оцінка] @mark.Mark</p>
+                                }
+                            }
                             <p class="text-center">@mark.Mark</p>
                         }
                     }

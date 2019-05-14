@@ -39,6 +39,11 @@
                 <span asp-validation-for="IsForSemesterMarks" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label class="control-label">Для річної оцінки</label>
+                <input asp-for="IsForYearMarks" class="form-control" />
+                <span asp-validation-for="IsForYearMarks" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Створити" class="btn btn-primary" />
             </div>
         </form>
