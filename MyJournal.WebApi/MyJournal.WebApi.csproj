@@ -5,6 +5,10 @@
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Content Remove="wwwroot\img\school.jpg" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
@@ -47,8 +51,20 @@
 
 
   <ItemGroup>
+    <EmbeddedResource Include="wwwroot\img\school.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
+
+  <ItemGroup>
     <ProjectReference Include="..\MyJournal.Domain\MyJournal.Domain.csproj" />
     <ProjectReference Include="..\MyJournal.Services\MyJournal.Services.csproj" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <None Include="wwwroot\img\school.jpg" />
   </ItemGroup>
 
 </Project>
