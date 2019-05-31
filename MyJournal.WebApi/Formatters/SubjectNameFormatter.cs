@@ -7,8 +7,9 @@ namespace MyJournal.WebApi.Formatters
     {
         public string Format(Subject subject)
         {
-            var originalLower = subject.Name.ToLowerInvariant();
-            return originalLower[0].ToString().ToUpperInvariant() + originalLower.Substring(1);
+            /*var originalLower = subject.Name.ToLowerInvariant();
+            return originalLower[0].ToString().ToUpperInvariant() + originalLower.Substring(1);*/
+            return subject.Name;
         }
     }
 }
