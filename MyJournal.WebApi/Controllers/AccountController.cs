@@ -8,10 +8,12 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyJournal.Services.Extensibility;
+using MyJournal.WebApi.Attributes;
 using MyJournal.WebApi.Models.Account;
 
 namespace MyJournal.WebApi.Controllers
 {
+    [UpdateActivity]
     public class AccountController : Controller
     {
         private IUserManager userManager;

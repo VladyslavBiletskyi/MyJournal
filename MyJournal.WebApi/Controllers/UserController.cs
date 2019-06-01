@@ -3,10 +3,12 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using MyJournal.Services.Extensibility.Formatters;
 using MyJournal.Services.Extensibility.Services;
+using MyJournal.WebApi.Attributes;
 using MyJournal.WebApi.Models.User;
 
 namespace MyJournal.WebApi.Controllers
 {
+    [UpdateActivity]
     public class UserController : Controller
     {
         private readonly IUserService userService;

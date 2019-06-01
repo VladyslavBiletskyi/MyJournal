@@ -6,11 +6,13 @@ using Microsoft.AspNetCore.Mvc;
 using MyJournal.Domain.Entities;
 using MyJournal.Services.Extensibility.Formatters;
 using MyJournal.Services.Extensibility.Services;
+using MyJournal.WebApi.Attributes;
 using MyJournal.WebApi.Extensibility.Providers;
 using MyJournal.WebApi.Models.Message;
 
 namespace MyJournal.WebApi.Controllers
 {
+    [UpdateActivity]
     public class MessageController : Controller
     {
         private ICurrentUserProvider currentUserProvider;

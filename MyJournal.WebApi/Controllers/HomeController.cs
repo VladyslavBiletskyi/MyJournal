@@ -1,11 +1,13 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using MyJournal.WebApi.Attributes;
 using MyJournal.WebApi.Models;
 
 namespace MyJournal.WebApi.Controllers
 {
     public class HomeController : Controller
     {
+        [UpdateActivity]
         public IActionResult Index()
         {
             return View();

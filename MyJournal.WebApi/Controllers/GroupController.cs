@@ -5,26 +5,35 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MyJournal.Domain.Entities;
+using MyJournal.Services.Extensibility.Formatters;
 using MyJournal.Services.Extensibility.Services;
+using MyJournal.WebApi.Attributes;
 using MyJournal.WebApi.Extensibility.Formatters;
+using MyJournal.WebApi.Extensibility.Providers;
 using MyJournal.WebApi.Models;
 using MyJournal.WebApi.Models.Group;
 
 namespace MyJournal.WebApi.Controllers
 {
+    [UpdateActivity]
     public class GroupController : Controller
     {
         private IGroupService groupService;
         private ILogger logger;
         private IGroupNameFormatter groupNameFormatter;
         private IUserService userService;
+        private ICurrentUserProvider currentUserProvider;
+        private IUserNameFormatter userNameFormatter;
 
-        public GroupController(IGroupService groupService, ILogger<GroupController> logger, IGroupNameFormatter groupNameFormatter, IUserService userService)
+        public GroupController(
+            IGroupService groupService, ILogger<GroupController> logger, IGroupNameFormatter groupNameFormatter, IUserService userService, ICurrentUserProvider currentUserProvider, IUserNameFormatter userNameFormatter)
         {
             this.groupService = groupService;
             this.logger = logger;
             this.groupNameFormatter = groupNameFormatter;
             this.userService = userService;
+            this.currentUserProvider = currentUserProvider;
+            this.userNameFormatter = userNameFormatter;
         }
 
         [HttpGet]
@@ -32,6 +41,27 @@ namespace MyJournal.WebApi.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+
+        [HttpGet]
+        [Authorize(Policy = Constants.TeacherPolicyName)]
+        public IActionResult Display()
+        {
+            var currentUser = currentUserProvider.GetCurrentUser<Teacher>(User);
+            if (currentUser?.Group == null)
+            {
+                return View("DisplayEmpty");
+            }
+            var displayModel = new DisplayGroupModel
+            {
+                Name = groupNameFormatter.Format(currentUser.Group),
+                Students = currentUser.Group.Students?.Select(x => new DisplayStudentModel
+                {
+                    Name = userNameFormatter.FormatFull(x),
+                    LastActivity = x.LastActivity
+                })
+            };
+            return View(displayModel);
         }
 
         [HttpGet]

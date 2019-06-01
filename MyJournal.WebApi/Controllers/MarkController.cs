@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyJournal.Domain.Entities;
 using MyJournal.Services.Extensibility.Services;
+using MyJournal.WebApi.Attributes;
 using MyJournal.WebApi.Extensibility.Formatters;
 using MyJournal.WebApi.Extensibility.Providers;
 using MyJournal.WebApi.Models.Mark;
@@ -15,6 +16,7 @@ using MyJournal.WebApi.Models.Subject;
 
 namespace MyJournal.WebApi.Controllers
 {
+    [UpdateActivity]
     public class MarkController : Controller
     {
         private readonly IMarkService markService;

@@ -1,0 +1,28 @@
+﻿@using MyJournal.Services.Extensibility.Formatters
+@model MyJournal.WebApi.Models.Group.DisplayGroupModel
+@inject IDateTimeFormatter DateTimeFormatter
+
+@{
+    ViewData["Title"] = "Клас";
+}
+
+<h1>Клас: @Model.Name</h1>
+
+<div>
+    <hr />
+    <div class="container">
+        @foreach (var student in Model.Students)
+        {
+            <div class="row">
+                <div class="col-5">@student.Name</div>
+                @{
+                    var lastActivity = !student.LastActivity.HasValue ? "Немає даних" : DateTimeFormatter.Format(student.LastActivity.Value);
+                }
+                <div class="col-5">Дата останньої активності: @lastActivity</div>
+            </div>
+        }
+    </div>
+</div>
+<div>
+    <a asp-action="Index">Назад</a>
+</div>

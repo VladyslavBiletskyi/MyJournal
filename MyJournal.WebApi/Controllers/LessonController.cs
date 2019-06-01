@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyJournal.Domain.Entities;
 using MyJournal.Services.Extensibility.Services;
+using MyJournal.WebApi.Attributes;
 using MyJournal.WebApi.Extensibility.Formatters;
 using MyJournal.WebApi.Extensibility.Providers;
 using MyJournal.WebApi.Models.Lesson;
@@ -12,6 +13,7 @@ using MyJournal.WebApi.Models.Mark;
 
 namespace MyJournal.WebApi.Controllers
 {
+    [UpdateActivity]
     public class LessonController : Controller
     {
         private readonly IUserService userService;
