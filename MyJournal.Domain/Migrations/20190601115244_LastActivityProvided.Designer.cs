@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyJournal.Domain.Data;
 
 namespace MyJournal.Domain.Migrations
 {
     [DbContext(typeof(MyJournalDbContext))]
-    partial class MyJournalDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190601115244_LastActivityProvided")]
+    partial class LastActivityProvided
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

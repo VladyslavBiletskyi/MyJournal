@@ -1,4 +1,6 @@
-﻿namespace MyJournal.Domain.Entities
+﻿using System;
+
+namespace MyJournal.Domain.Entities
 {
     public class ApplicationUser : BaseInstance
     {
@@ -17,5 +19,7 @@
         public string Surname { get; set; }
 
         public Group Group { get; set; }
+
+        public DateTime? LastActivity { get; set; }
     }
 }

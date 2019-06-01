@@ -32,6 +32,7 @@ namespace MyJournal.Domain.Repositories
                 originalInstance.PasswordSalt = instance.PasswordSalt;
                 originalInstance.PasswordHash = instance.PasswordHash;
                 originalInstance.Group = instance.Group;
+                originalInstance.LastActivity = instance.LastActivity;
                 DatabaseContext.SaveChanges();
                 return true;
             }
